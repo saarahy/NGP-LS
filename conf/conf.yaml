@@ -1,0 +1,29 @@
+problem: "Housing2"
+num_var: 6
+n_problem: 1100
+db_name: "housing.txt"
+path: "./data_corridas/Housing/train_%d_%d.txt"
+
+population_size: 100
+tournament_size: 7
+generations: 200000
+cxpb: 0.9
+mutpb: 0.1
+params: ['best_of_each_specie', 2, 'yes']
+
+neat_cx: False
+neat_alg: True
+neat_pelit: 0.5
+neat_h: 0.15
+
+ls_flag: False
+ls_select: 8
+
+save_matrix: True
+gen_matrix: False
+
+num_salto: 500
+cont_evalf: 100000
+
+
+
