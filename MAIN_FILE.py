@@ -8,6 +8,7 @@ import init_conf
 import os.path
 import time
 import yaml
+import smtplib
 from deap import base
 from deap import creator
 from deap import tools
@@ -181,3 +182,15 @@ if __name__ == "__main__":
         n += 1
         end_p = time.time()
         time_conc.write('\n%s;%s;%s;%s' % (n, begin_p, end_p, str(round(end_p - begin_p, 2))))
+
+
+
+    server = smtplib.SMTP('smtp.gmail.com', 587)
+    server.set_debuglevel(1)
+    server.starttls()
+    server.ehlo()
+    server.login("problems.servers@gmail.com", "ArrowOliver20")
+
+    msg = "THE RUN IS FINITO!" + str(config["problem"])
+    server.sendmail("juarez.s.perla@gmail.com", "juarez.s.perla@gmail.com", msg)
+    server.quit()
