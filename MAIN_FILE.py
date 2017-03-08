@@ -87,28 +87,28 @@ def train_test(n_corr,p, problem, name_database, toolbox, config):
     toolbox.register("evaluate_test", evalSymbReg, points=data_test, toolbox=toolbox, var_par=config["num_var"])
 
 
-def main(n_corr, p, problem, database_name, var_par, config):
-    pset = conf_sets(var_par)
+def main(n_corr, p, problem, database_name, pset, config):
+
 
     pop_size = config["population_size"]
-    cxpb = config["cxpb"]  # 0.9
-    mutpb = config["mutpb"]  # 0.1
-    tournament_size= config["tournament_size"]
-    ngen = config["generations"]
-    params = ['best_of_each_specie', 2, 'yes']
-    neat_cx = config["neat_cx"]
-    neat_alg = config["neat_alg"]
-    neat_pelit = config["neat_pelit"]
-    neat_h = config["neat_h"]
-    funcEval.LS_flag = config["ls_flag"]
-    LS_select = config["ls_select"]
+    cxpb                = config["cxpb"]  # 0.9
+    mutpb               = config["mutpb"]  # 0.1
+    tournament_size     = config["tournament_size"]
+    ngen                = config["generations"]
+    params              = ['best_of_each_specie', 2, 'yes']
+    neat_cx             = config["neat_cx"]
+    neat_alg            = config["neat_alg"]
+    neat_pelit          = config["neat_pelit"]
+    neat_h              = config["neat_h"]
+    funcEval.LS_flag    = config["ls_flag"]
+    LS_select           = config["ls_select"]
     funcEval.cont_evalp = 0
-    num_salto = config["num_salto"]  # 500
-    cont_evalf = config["cont_evalf"]
-    SaveMatrix = config["save_matrix"]
-    GenMatrix = config["gen_matrix"]
-    version = 3
-    testing = True
+    num_salto           = config["num_salto"]  # 500
+    cont_evalf          = config["cont_evalf"]
+    SaveMatrix          = config["save_matrix"]
+    GenMatrix           = config["gen_matrix"]
+    version             = 3
+    testing             = True
 
 
     creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -175,22 +175,12 @@ if __name__ == "__main__":
     neatGPLS.ensure_dir(d)
     time_conc = open(d, 'a')
 
+    pset = conf_sets(num_var)
+
     n = 1
     while n < 31:
         begin_p = time.time()
-        main(n, number, problem, database_name, num_var, config)
+        main(n, number, problem, database_name, pset, config)
         n += 1
         end_p = time.time()
         time_conc.write('\n%s;%s;%s;%s' % (n, begin_p, end_p, str(round(end_p - begin_p, 2))))
-
-
-
-    server = smtplib.SMTP('smtp.gmail.com', 587)
-    server.set_debuglevel(1)
-    server.starttls()
-    server.ehlo()
-    server.login("problems.servers@gmail.com", "ArrowOliver20")
-
-    msg = "THE RUN IS FINITO!" + str(config["problem"])
-    server.sendmail("juarez.s.perla@gmail.com", "juarez.s.perla@gmail.com", msg)
-    server.quit()
