@@ -264,6 +264,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
         Matrix[:, 6] = 0.
 
     begin_sp = time.time()
+
     if neat_alg:
         if version == 1:
             for ind in population:
@@ -479,6 +480,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             if best_ind.fitness.values[0] <= orderbyfit[0].fitness.values[0]:
                 offspring[:] = [best_ind]+orderbyfit[:len(population)-1]
         print 'End Specie'
+
         if neat_alg:
             SpeciesPunishment(offspring, params, neat_h)
 
@@ -496,6 +498,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             #specie_statis.write('\n%s;%s' % (gen, ind_specie(offspring)))
             np.savetxt('./Specie/%s/specist_%d_%d.txt' % (problem, num_p, n_corr), Matrix_specie, delimiter=";",
                        fmt="%s")
+
         population[:] = offspring  # population update
 
         specie_file.write('\n%s--------------------------------' % gen)

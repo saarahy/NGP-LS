@@ -1,8 +1,8 @@
 problem: "Housing2"
-num_var: 6
+num_var: 13
 n_problem: 1100
 db_name: "housing.txt"
-path: "./data_corridas/Housing/train_%d_%d.txt"
+
 
 population_size: 100
 tournament_size: 7
@@ -24,6 +24,9 @@ gen_matrix: False
 
 num_salto: 500
 cont_evalf: 100000
+
+run_begin: 1
+run_end: 30
 
 
 

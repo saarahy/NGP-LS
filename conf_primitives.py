@@ -8,6 +8,7 @@ from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt
 
 def rename_arguments(argument,pset):
     switcher = {
+        2: pset.renameArguments(ARG0='x0',ARG1='x1'),
         6: pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5'),
         8: pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7'),
         13: pset.renameArguments(ARG0='x0', ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7',

@@ -95,16 +95,19 @@ def main(n_corr, p, problem, database_name, pset, config):
     mutpb               = config["mutpb"]  # 0.1
     tournament_size     = config["tournament_size"]
     ngen                = config["generations"]
+
     params              = ['best_of_each_specie', 2, 'yes']
     neat_cx             = config["neat_cx"]
     neat_alg            = config["neat_alg"]
     neat_pelit          = config["neat_pelit"]
     neat_h              = config["neat_h"]
+
     funcEval.LS_flag    = config["ls_flag"]
     LS_select           = config["ls_select"]
     funcEval.cont_evalp = 0
     num_salto           = config["num_salto"]  # 500
     cont_evalf          = config["cont_evalf"]
+
     SaveMatrix          = config["save_matrix"]
     GenMatrix           = config["gen_matrix"]
     version             = 3
@@ -177,8 +180,8 @@ if __name__ == "__main__":
 
     pset = conf_sets(num_var)
 
-    n = 1
-    while n < 31:
+    n = config["run_begin"]
+    while n < config["run_end"]:
         begin_p = time.time()
         main(n, number, problem, database_name, pset, config)
         n += 1
