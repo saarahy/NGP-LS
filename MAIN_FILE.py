@@ -9,6 +9,7 @@ import os.path
 import time
 import yaml
 import smtplib
+import socket
 from deap import base
 from deap import creator
 from deap import tools
@@ -179,6 +180,8 @@ if __name__ == "__main__":
     time_conc = open(d, 'a')
 
     pset = conf_sets(num_var)
+
+    instance_name=socket.gethostname()
 
     n = config["run_begin"]
     while n < config["run_end"]:
