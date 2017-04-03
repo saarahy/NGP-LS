@@ -15,9 +15,9 @@ def nguyen5(samples):
 def nguyen7(samples):
     return np.log(samples + 1.0) + np.log(samples ** 2 + 1.0)
 def nguyen10(samples):
-    return 2.0 * np.sin(samples[:, 0]) * np.cos(samples[:, 1])
+    return 2.0 * np.sin(samples.T[:, 0]) * np.cos(samples.T[:, 1])
 def pagie1(samples):
-    return (1 / (1 + samples[:, 0] ** -4)) + (1 / (1 + samples[:, 1] ** -4))
+    return (1 / (1 + samples.T[:, 0] ** -4)) + (1 / (1 + samples.T[:, 1] ** -4))
 def keijzer6(samples):
     return np.sum(1.0 / samples)
 def vladislavleva1(samples):

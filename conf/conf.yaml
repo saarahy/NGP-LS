@@ -1,6 +1,9 @@
-benchmark: True
-problem: "koza-1"
-num_var: 3
+benchmark: true
+problem: "nguyen-10"
+#problem: "Yacht2"
+#num_var: 6
+num_var: 2
+#n_problem: 123
 n_problem: 4900
 db_name: "yacht_hydrodynamics.txt"
 #db_name: "energy_efficiency_Heat.csv"

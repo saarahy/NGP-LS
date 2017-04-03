@@ -24,9 +24,10 @@ def evalSymbReg(individual, points, toolbox, config):
     func = toolbox.compile(expr=individual)
     if config["benchmark"]:
         vector=vector_benchmarks(config["problem"],points)
+        data_x = np.asarray(points)[:]
     else:
         vector = points[config["num_var"]]
-    data_x=np.asarray(points)[:config["num_var"]]
+        data_x=np.asarray(points)[:config["num_var"]]
     vector_x=func(*data_x)
     with np.errstate(divide='ignore', invalid='ignore'):
         if isinstance(vector_x, np.ndarray):
