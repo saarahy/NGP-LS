@@ -22,9 +22,9 @@ d = './data_corridas/%s/' % (problem)
 ensure_dir(d)
 
 for n_corr in range(1,num_corr):
-    samples = random_floats(low,high,size)
-    np.savetxt('./data_corridas/%s/train_%d_%d.txt'%(problem,num_p, n_corr),samples,delimiter=',')
+    np.savetxt('./data_corridas/%s/train_%d_%d.txt'%(problem,num_p, n_corr), np.vstack( [np.random.uniform(low, high) for _ in xrange(size)] for i in range(num_v) ).T, delimiter=",")
+    #np.savetxt('./data_corridas/%s/train_%d_%d.txt'%(problem,num_p, n_corr),samples,delimiter=',')
 
 for n_corr in range(1, num_corr):
-    samples = random_floats(low_test, high_test, size_test)
-    np.savetxt('./data_corridas/%s/test_%d_%d.txt' % (problem, num_p, n_corr), samples, delimiter=',')
+    np.savetxt('./data_corridas/%s/test_%d_%d.txt' % (problem, num_p, n_corr),
+               np.vstack([np.random.uniform(low, high) for _ in xrange(size)] for i in range(num_v)).T, delimiter=",")

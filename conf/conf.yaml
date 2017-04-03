@@ -1,6 +1,6 @@
 benchmark: True
 problem: "koza-1"
-num_var: 1
+num_var: 3
 n_problem: 4900
 db_name: "yacht_hydrodynamics.txt"
 #db_name: "energy_efficiency_Heat.csv"
