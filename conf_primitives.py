@@ -20,7 +20,7 @@ def pagie1(samples):
     return (1 / (1 + samples[:, 0] ** -4)) + (1 / (1 + samples[:, 1] ** -4))
 def keijzer6(samples):
     return np.sum(1.0 / samples)
-def vladoslavleva1(samples):
+def vladislavleva1(samples):
     return (np.exp(-((samples.T[:,0]-1)**2)))/(1.2+((samples.T[:,1]-2.5)**2))
 
 def vector_benchmarks(argument, samples):
@@ -40,8 +40,8 @@ def vector_benchmarks(argument, samples):
         return korns12(samples)
     elif argument in 'keijzer-6':
         return keijzer6(samples)
-    elif argument in 'vladoslavleva-1':
-        return vladoslavleva1(samples)
+    elif argument in 'vladislavleva-1':
+        return vladislavleva1(samples)
 
 
 
