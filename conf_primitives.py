@@ -4,10 +4,50 @@ import numpy as np
 from deap import gp
 from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt
 
+def koza1(samples):
+    return samples**4 + samples**3 + samples**2 + samples
+def korns12(samples):
+    return 2.0-(2.1 * (np.cos(9.8 * samples.T[:, 0]) * np.sin(1.3 * samples.T[:, 4])))
+def nguyen3(samples):
+    return samples ** 5 + samples ** 4 + samples ** 3 + samples ** 2 + samples,
+def nguyen5(samples):
+    return np.sin(samples ** 2) * np.cos(samples) - 1
+def nguyen7(samples):
+    return np.log(samples + 1.0) + np.log(samples ** 2 + 1.0)
+def nguyen10(samples):
+    return 2.0 * np.sin(samples[:, 0]) * np.cos(samples[:, 1])
+def pagie1(samples):
+    return (1 / (1 + samples[:, 0] ** -4)) + (1 / (1 + samples[:, 1] ** -4))
+def keijzer6(samples):
+    return np.sum(1.0 / samples)
+def vladoslavleva1(samples):
+    return (np.exp(-((samples.T[:,0]-1)**2)))/(1.2+((samples.T[:,1]-2.5)**2))
+
+def vector_benchmarks(argument, samples):
+    if argument in 'koza-1':
+        return koza1(samples)
+    elif argument in 'nguyen-3':
+        return nguyen3(samples)
+    elif argument in 'nguyen-5':
+        return nguyen5(samples)
+    elif argument in 'nguyen-7':
+        return nguyen7(samples)
+    elif argument in 'nguyen-10':
+        return nguyen10(samples)
+    elif argument in 'pagie-1':
+        return pagie1(samples)
+    elif argument in 'korns-12':
+        return korns12(samples)
+    elif argument in 'keijzer-6':
+        return keijzer6(samples)
+    elif argument in 'vladoslavleva-1':
+        return vladoslavleva1(samples)
+
 
 
 def rename_arguments(argument,pset):
     switcher = {
+        1: pset.renameArguments(ARG0='x0'),
         2: pset.renameArguments(ARG0='x0',ARG1='x1'),
         6: pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5'),
         8: pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7'),

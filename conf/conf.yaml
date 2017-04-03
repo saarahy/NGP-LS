@@ -1,7 +1,9 @@
-problem: "Housing2"
-num_var: 13
-n_problem: 1100
-db_name: "housing.txt"
+benchmark: True
+problem: "koza-1"
+num_var: 1
+n_problem: 4900
+db_name: "yacht_hydrodynamics.txt"
+#db_name: "energy_efficiency_Heat.csv"
 
 
 population_size: 100
@@ -12,21 +14,21 @@ mutpb: 0.1
 params: ['best_of_each_specie', 2, 'yes']
 
 neat_cx: False
-neat_alg: True
+neat_alg: False
 neat_pelit: 0.5
 neat_h: 0.15
 
 ls_flag: False
-ls_select: 8
+ls_select: 9
 
 save_matrix: True
 gen_matrix: False
 
 num_salto: 500
-cont_evalf: 100000
+cont_evalf: 50000
 
 run_begin: 1
-run_end: 30
+run_end: 31
 
 
 
