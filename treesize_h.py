@@ -59,7 +59,7 @@ def random_set_pop(population):
     return orderbyfit
 
 
-def ls_bestset(population, p, n, pset, direccion):  # size heuristic
+def ls_bestset(population, p, n, pset, direccion, problem):  # size heuristic
     best_set=best_set_pop(population)
     for ind in best_set:
         strg = ind.__str__()
@@ -70,7 +70,7 @@ def ls_bestset(population, p, n, pset, direccion):  # size heuristic
         l_strg = add_subt_cf(strg, args)
         c = tree2f()
         cd = c.convert(l_strg)
-        xdata, ydata = get_address(p, n, direccion)
+        xdata, ydata = get_address(p, n, problem, direccion)
         beta_opt, beta_cov, success, nfev = curve_fit_2(eval_,cd , xdata, ydata, p0=ind.get_params(), method='trf', max_nfev=40)
         if not success:
             ind.LS_applied_set(1)
@@ -127,7 +127,7 @@ def ls_randbestset(population, p, n, pset, direccion, problem):  # size heuristi
             ind.params_set(beta_opt)
 
 
-def trees_h(population, p, n, pset, direccion):  # size heuristic
+def trees_h(population, p, n, pset, direccion, problem):  # size heuristic
     eval_prob(population)
     for ind in population:
         if random.random() <= ind.get_LS_prob():
@@ -139,7 +139,7 @@ def trees_h(population, p, n, pset, direccion):  # size heuristic
             l_strg = add_subt_cf(strg, args)
             c = tree2f()
             cd = c.convert(l_strg)
-            xdata, ydata = get_address(p, n, direccion)
+            xdata, ydata = get_address(p, n, problem, direccion)
             beta_opt, beta_cov, success, nfev = curve_fit_2(eval_,cd , xdata, ydata, p0=ind.get_params(), method='trf', max_nfev=40)
             if not success:
                 ind.LS_applied_set(1)

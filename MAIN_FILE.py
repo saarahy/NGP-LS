@@ -9,20 +9,25 @@ import os.path
 import time
 import yaml
 import smtplib
+import socket
 from deap import base
 from deap import creator
 from deap import tools
 from deap import gp
 import gp_conf as neat_gp
 from shutil import copyfile
-from conf_primitives import conf_sets
+from conf_primitives import conf_sets, vector_benchmarks
 
 
 
-def evalSymbReg(individual, points, toolbox, var_par):
+def evalSymbReg(individual, points, toolbox, config):
     func = toolbox.compile(expr=individual)
-    vector = points[var_par]
-    data_x=np.asarray(points)[:var_par]
+    if config["benchmark"]:
+        vector=vector_benchmarks(config["problem"],points)
+        data_x = np.asarray(points)[:]
+    else:
+        vector = points[config["num_var"]]
+        data_x=np.asarray(points)[:config["num_var"]]
     vector_x=func(*data_x)
     with np.errstate(divide='ignore', invalid='ignore'):
         if isinstance(vector_x, np.ndarray):
@@ -31,6 +36,9 @@ def evalSymbReg(individual, points, toolbox, var_par):
                     vector_x[e] = 0.
     result = np.sum((vector_x - vector)**2)
     return np.sqrt(result/len(points[0])),
+
+
+
 
 def train_test(n_corr,p, problem, name_database, toolbox, config):
     n_archivot='./data_corridas/%s/test_%d_%d.txt'%(problem,p,n_corr)
@@ -83,8 +91,8 @@ def train_test(n_corr,p, problem, name_database, toolbox, config):
                     print 'Line {r} is corrupt' , r
                     break
         data_test=Matrix[:]
-    toolbox.register("evaluate", evalSymbReg, points=data_train, toolbox=toolbox, var_par=config["num_var"])
-    toolbox.register("evaluate_test", evalSymbReg, points=data_test, toolbox=toolbox, var_par=config["num_var"])
+    toolbox.register("evaluate", evalSymbReg, points=data_train, toolbox=toolbox, config=config)
+    toolbox.register("evaluate_test", evalSymbReg, points=data_test, toolbox=toolbox, config=config)
 
 
 def main(n_corr, p, problem, database_name, pset, config):
@@ -95,16 +103,19 @@ def main(n_corr, p, problem, database_name, pset, config):
     mutpb               = config["mutpb"]  # 0.1
     tournament_size     = config["tournament_size"]
     ngen                = config["generations"]
+
     params              = ['best_of_each_specie', 2, 'yes']
     neat_cx             = config["neat_cx"]
     neat_alg            = config["neat_alg"]
     neat_pelit          = config["neat_pelit"]
     neat_h              = config["neat_h"]
+
     funcEval.LS_flag    = config["ls_flag"]
     LS_select           = config["ls_select"]
     funcEval.cont_evalp = 0
     num_salto           = config["num_salto"]  # 500
     cont_evalf          = config["cont_evalf"]
+
     SaveMatrix          = config["save_matrix"]
     GenMatrix           = config["gen_matrix"]
     version             = 3
@@ -177,8 +188,10 @@ if __name__ == "__main__":
 
     pset = conf_sets(num_var)
 
-    n = 1
-    while n < 31:
+    instance_name=socket.gethostname()
+
+    n = config["run_begin"]
+    while n < config["run_end"]:
         begin_p = time.time()
         main(n, number, problem, database_name, pset, config)
         n += 1
