@@ -170,7 +170,7 @@ def all_pop(population, p, n, pset, direccion, problem):  # size heuristic
         c = tree2f()
         cd = c.convert(l_strg)
         xdata, ydata = get_address(p, n, problem, direccion)
-        beta_opt, beta_cov, success, nfev = curve_fit_2(eval_,cd , xdata, ydata, p0=ind.get_params(), method='trf', max_nfev=40)
+        beta_opt, beta_cov, success, nfev = curve_fit_2(eval_, cd, xdata, ydata, p0=ind.get_params(), method='trf', max_nfev=40)
         if not success:
             ind.LS_applied_set(1)
             ind.LS_story_set(1)
