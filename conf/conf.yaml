@@ -21,8 +21,8 @@ neat_alg: False
 neat_pelit: 0.5
 neat_h: 0.15
 
-ls_flag: False
-ls_select: 9
+ls_flag: True
+ls_select: 8
 
 save_matrix: True
 gen_matrix: False

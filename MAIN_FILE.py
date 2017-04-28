@@ -19,16 +19,15 @@ from shutil import copyfile
 from conf_primitives import conf_sets, vector_benchmarks
 
 
-
 def evalSymbReg(individual, points, toolbox, config):
     func = toolbox.compile(expr=individual)
     if config["benchmark"]:
-        vector=vector_benchmarks(config["problem"],points)
+        vector = vector_benchmarks(config["problem"], points)
         data_x = np.asarray(points)[:]
     else:
         vector = points[config["num_var"]]
-        data_x=np.asarray(points)[:config["num_var"]]
-    vector_x=func(*data_x)
+        data_x = np.asarray(points)[:config["num_var"]]
+    vector_x = func(*data_x)
     with np.errstate(divide='ignore', invalid='ignore'):
         if isinstance(vector_x, np.ndarray):
             for e in range(len(vector_x)):
@@ -38,9 +37,7 @@ def evalSymbReg(individual, points, toolbox, config):
     return np.sqrt(result/len(points[0])),
 
 
-
-
-def train_test(n_corr,p, problem, name_database, toolbox, config):
+def train_test(n_corr, p, problem, name_database, toolbox, config):
     n_archivot='./data_corridas/%s/test_%d_%d.txt'%(problem,p,n_corr)
     n_archivo='./data_corridas/%s/train_%d_%d.txt'%(problem,p,n_corr)
     if not (os.path.exists(n_archivo) or os.path.exists(n_archivot)):
@@ -120,6 +117,7 @@ def main(n_corr, p, problem, database_name, pset, config):
     GenMatrix           = config["gen_matrix"]
     version             = 3
     testing             = True
+    benchmark_flag      = config["benchmark"]
 
 
     creator.create("FitnessMin", base.Fitness, weights=(-1.0,))
@@ -164,8 +162,8 @@ def main(n_corr, p, problem, database_name, pset, config):
 
     pop, log = neatGPLS.neat_GP_LS(pop, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,
                                    neat_pelit, funcEval.LS_flag, LS_select, cont_evalf,
-                                   num_salto, SaveMatrix, GenMatrix, pset,n_corr, p,
-                                   params, direccion,problem,testing, version,
+                                   num_salto, SaveMatrix, GenMatrix, pset, n_corr, p,
+                                   params, direccion, problem, testing, version, benchmark_flag,
                                    stats=mstats, halloffame=hof, verbose=True)
 
     return pop, log, hof

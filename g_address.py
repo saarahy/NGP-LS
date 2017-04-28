@@ -1,11 +1,14 @@
 import numpy as np
 import csv
-def get_address(p,n,problem,direccion):
-    flag=True
+from conf_primitives import vector_benchmarks
+
+
+def get_address(p, n, problem, direccion, benchmark_flag):
+    flag = True
     try:
-        direccion=direccion%(problem,p,n)
+        direccion=direccion % (problem,p,n)
     except:
-        flag=False
+        flag = False
         direccion = direccion % (problem,n)
     if flag:
         with open(direccion) as spambase:
@@ -20,9 +23,14 @@ def get_address(p,n,problem,direccion):
                     except ValueError:
                         print 'Line {r} is corrupt' , r
                         break
-            xdata=Matrix[:num_r-1]
-            ydata=Matrix[num_r-1]
-        return xdata,ydata
+
+            if benchmark_flag:
+                xdata = Matrix[:num_r]
+                ydata = vector_benchmarks(problem, xdata)
+            else:
+                xdata = Matrix[:num_r - 1]
+                ydata = Matrix[num_r-1]
+        return xdata, ydata
     else:
         with open(direccion) as spambase:
             spamReader = csv.reader(spambase, delimiter=' ', skipinitialspace=True)
@@ -36,6 +44,10 @@ def get_address(p,n,problem,direccion):
                     except ValueError:
                         print 'Line {r} is corrupt', r
                         break
-            xdata = Matrix[:num_r - 1]
-            ydata = Matrix[num_r - 1]
+            if benchmark_flag:
+                xdata = Matrix[:num_r]
+                ydata = vector_benchmarks(problem, xdata)
+            else:
+                xdata = Matrix[:num_r - 1]
+                ydata = Matrix[num_r - 1]
         return xdata, ydata

@@ -134,7 +134,7 @@ def ensure_dir(f):
         os.makedirs(d)
 
 def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,neat_pelit, LS_flag, LS_select, cont_evalf,
-               num_salto, SaveMatrix, GenMatrix, pset,n_corr, num_p, params, direccion, problem, testing, version,
+               num_salto, SaveMatrix, GenMatrix, pset,n_corr, num_p, params, direccion, problem, testing, version, benchmark_flag,
                stats=None, halloffame=None, verbose=__debug__):
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_.
@@ -514,23 +514,23 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                 ind.LS_applied_set(0)
 
             if   LS_select == 1:
-                trees_h(population, num_p, n_corr,  pset, direccion, problem)
+                trees_h(population, num_p, n_corr,  pset, direccion, problem, benchmark_flag)
             elif LS_select == 2:
-                best_specie(population, num_p, n_corr, pset, direccion, problem)
+                best_specie(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             elif LS_select == 3:
-                specie_h(population, num_p, n_corr, pset, direccion, problem)
+                specie_h(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             elif LS_select == 4:
-                best_pop_ls(population, num_p, n_corr, pset, direccion, problem)
+                best_pop_ls(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             elif LS_select == 5:
-                all_pop(population, num_p, n_corr, pset, direccion, problem)
+                all_pop(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             elif LS_select == 6:
-                trees_h_wo(population, num_p, n_corr, pset, direccion, problem)
+                trees_h_wo(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             elif LS_select == 7:
-                ls_bestset(population, num_p, n_corr, pset, direccion, problem)
+                ls_bestset(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             elif LS_select == 8:
-                ls_random(population, num_p, n_corr, pset, direccion, problem)
+                ls_random(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             elif LS_select == 9:
-                ls_randbestset(population, num_p, n_corr, pset, direccion, problem)
+                ls_randbestset(population, num_p, n_corr, pset, direccion, problem, benchmark_flag)
             #
             invalid_ind = [ind for ind in population]
             new_invalid_ind = []
