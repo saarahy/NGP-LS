@@ -80,7 +80,7 @@ def set_numind(ind,species):
             ind.num_specie(species[i][1])
 
 
-def species(population, h, version):
+def species(population, h, version, beta):
     """
     This is the speciation method.
     This method compare each individual with the rest
@@ -111,7 +111,7 @@ def species(population, h, version):
                         #     print ind1.binary_rep_get()
                         #     print 'D2:', distance(ind, ind1, 3)
 
-                        if distance(ind,ind1, version) <= h:
+                        if distance(ind,ind1, version, beta) <= h:
                             ind.specie(ind1.get_specie())
                             break
 

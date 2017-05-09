@@ -48,7 +48,7 @@ def recorrido(ind1, ind2):
         list1.extend(test(x, y))
     return list1
 
-def distance(ind1, ind2, version):
+def distance(ind1, ind2, version, beta):
     """
     This method determine the distance between two individuals
     Equation (2) of Leonardo Trujillo et al. neat Genetic Programming. Inf. Sci. 333, C (March 2016), 21-43.
@@ -59,9 +59,9 @@ def distance(ind1, ind2, version):
     :return: A number indicating the distance
     """
 
-    b=0.5
-    Nij=len(ind1)+len(ind2)
-    Dij=(ind1.height+1)+(ind2.height+1)
+    b = beta
+    Nij = len(ind1)+len(ind2)
+    Dij = (ind1.height+1)+(ind2.height+1)
 
     if version == 1:
         ind1_b = ind1.binary_rep_get()#ind1.p_bin

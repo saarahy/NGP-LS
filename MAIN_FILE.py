@@ -106,6 +106,7 @@ def main(n_corr, p, problem, database_name, pset, config):
     neat_alg            = config["neat_alg"]
     neat_pelit          = config["neat_pelit"]
     neat_h              = config["neat_h"]
+    beta                = config["neat_beta"]
 
     funcEval.LS_flag    = config["ls_flag"]
     LS_select           = config["ls_select"]
@@ -163,7 +164,7 @@ def main(n_corr, p, problem, database_name, pset, config):
     pop, log = neatGPLS.neat_GP_LS(pop, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,
                                    neat_pelit, funcEval.LS_flag, LS_select, cont_evalf,
                                    num_salto, SaveMatrix, GenMatrix, pset, n_corr, p,
-                                   params, direccion, problem, testing, version, benchmark_flag,
+                                   params, direccion, problem, testing, version, benchmark_flag, beta,
                                    stats=mstats, halloffame=hof, verbose=True)
 
     return pop, log, hof

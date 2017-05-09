@@ -4,34 +4,48 @@ from neatGPLS import ensure_dir
 def get_data(directory, index_, out):
     data=list()
     #data2=list()
-    for i in range(1,14):
+    for i in range(1,31):
         direccion="./Results/%s/bestind_LStr_%d_%d.txt"%(directory,index_,i)
         with open(direccion) as spambase:
             spamReader = csv.reader(spambase,  delimiter=';', skipinitialspace=False)
+            cont=1
             for row in spamReader:
-                if row != [] and row[0]=='100':
-                    data.append(row[1])
+                if row != []:
+                    cont=cont+1
+            cont2 = cont
+            cont = 1
+        direccion = "./Results/%s/bestind_LStr_%d_%d.txt" % (directory, index_, i)
+        with open(direccion) as spambase:
+            spamReader2 = csv.reader(spambase, delimiter=';', skipinitialspace=False)
+            for row2 in spamReader2:
+                if row2 != [] and cont==cont2:
+                    data.append(row2[1])
+                cont = cont + 1
 
     print min(data)
     num=data.index(min(data))+1
     print num
 
-    direccion2="./Results/%s/bestind_LStr_%d_%d.txt"%(directory,index_,num)
-    with open(direccion2) as spambase:
+    direccion3="./Results/%s/bestind_LStr_%d_%d.txt"%(directory,index_,num)
+    with open(direccion3) as spambase:
+        spamReader = csv.reader(spambase, delimiter=';', skipinitialspace=False)
+        cont = 0
+        for row in spamReader:
+            if row != []:
+                cont = cont + 1
+    with open(direccion3) as spambase:
         spamReader = csv.reader(spambase,  delimiter=';', skipinitialspace=False)
         for row in spamReader:
-            if row != [] and row[0]=='100':
+            if row != [] and row[0]==str(cont):
                 #data2.append([num, row[2]])
                 print row[2]
                 out.write('\n%d;%s;%s;%s' % (index_, num, min(data), row[2]))
 
 
-    #print data2
-
-
-d = './data_pierrick/data_24.txt'
+d = './Engine/data_min.txt'
 ensure_dir(d)
 out = open(d, 'a')
-directory = "PierrickData24"
-for i in (1110,1010,1000,1100):
-    get_data(directory,i, out)
+directory = "Engine"
+#for i in (1101):
+i = 10101
+get_data(directory,i, out)

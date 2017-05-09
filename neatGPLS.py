@@ -134,7 +134,7 @@ def ensure_dir(f):
         os.makedirs(d)
 
 def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,neat_pelit, LS_flag, LS_select, cont_evalf,
-               num_salto, SaveMatrix, GenMatrix, pset,n_corr, num_p, params, direccion, problem, testing, version, benchmark_flag,
+               num_salto, SaveMatrix, GenMatrix, pset,n_corr, num_p, params, direccion, problem, testing, version, benchmark_flag, beta,
                stats=None, halloffame=None, verbose=__debug__):
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_.
@@ -275,7 +275,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                 level_info = level_node(ind)
                 ind.nodefeat_set(level_info)
 
-        species(population,neat_h, version)
+        species(population,neat_h, version, beta)
         #ind_specie(population)
 
     end_sp = time.time()

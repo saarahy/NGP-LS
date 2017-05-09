@@ -23,7 +23,6 @@ def get_address(p, n, problem, direccion, benchmark_flag):
                     except ValueError:
                         print 'Line {r} is corrupt' , r
                         break
-
             if benchmark_flag:
                 xdata = Matrix[:num_r]
                 ydata = vector_benchmarks(problem, xdata)
