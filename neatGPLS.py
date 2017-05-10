@@ -428,7 +428,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
         if neat_alg:  # Speciation of the descendants
             begin_sp = time.time()
 
-            if version ==1:
+            if version == 1:
                 for ind in offspring:
                     if ind.binary_rep_get() == None:
                         bit = p_bin(ind)
