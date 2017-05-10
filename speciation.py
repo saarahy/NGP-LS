@@ -160,7 +160,7 @@ def specie_parents_child(parents, offspring, h, version):
             else:
                 for parent in parents:
                     if parent.get_specie() != None:
-                        if distance(ind, parent, version) <= h:
+                        if distance(ind, parent, version,beta=0.5) <= h:
                             ind.specie(parent.get_specie())
                             break
                 if ind.get_specie()==None:

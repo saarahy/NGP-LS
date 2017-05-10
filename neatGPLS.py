@@ -281,9 +281,8 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
     end_sp = time.time()
     time_specie.write('\n%s;%s;%s;%s' % (0, begin_sp, end_sp, str(round(end_sp - begin_sp, 2))))
 
-    specie_file.write('\n-------')
     for ind in population:
-        specie_file.write('\n%s;%s;%s' % (ind.get_specie(),ind,version))
+        specie_file.write('\n%s;%s;%s;%s' % (0, ind.get_specie(),ind,version))
 
     if funcEval.LS_flag:
         for ind in population:
@@ -341,7 +340,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
         out.write('\n%s;%s;%s' % (0, len(best_ind), best_ind))
 
     for ind in population:
-        pop_file.write('\n%s;%s'%(ind.fitness.values[0], ind))
+        pop_file.write('\n%s;%s;%s'%(0,ind.fitness.values[0], ind))
 
     ls_type = ''
     if LS_select == 1:
@@ -501,10 +500,9 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
 
         population[:] = offspring  # population update
 
-        specie_file.write('\n%s--------------------------------' % gen)
         if neat_alg:
             for ind in population:
-                specie_file.write('\n%s;%s;%s' % (ind.get_specie(), ind, version))
+                specie_file.write('\n%s;%s;%s;%s' % (gen,ind.get_specie(), ind, version))
 
 
         cond_ind = 0
@@ -556,13 +554,13 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                 ind.fitness.values = ls_fit
             print ''
 
-            pop_file.write('\n----------------------------------------%s'%(gen))
+
             for ind in population:
-                pop_file.write('\n%s;%s;%s;%s'%(ind.LS_applied_get(),ind.fitness.values[0], ind, [x for x in ind.get_params()]))
+                pop_file.write('\n%s;%s;%s;%s;%s'%(gen, ind.fitness.values[0], ind.LS_applied_get(), ind, [x for x in ind.get_params()]))
         else:
-            pop_file.write('\n----------------------------------------')
+
             for ind in population:
-                pop_file.write('\n%s;%s;%s;%s;%s;%s'%(ind.LS_applied_get(),ind.LS_story_get(),ind.off_cx_get(),ind.off_mut_get(),ind.fitness.values[0], ind))
+                pop_file.write('\n%s;%s;%s;%s;%s;%s;%s'%(gen, ind.fitness.values[0], ind.LS_applied_get(),ind.LS_story_get(),ind.off_cx_get(),ind.off_mut_get(), ind))
 
         best_ind = best_pop(population)
         if funcEval.LS_flag:
