@@ -6,7 +6,7 @@ import os
 import time
 from deap import tools
 from neat_operators import neatGP
-from speciation import ind_specie, species, specie_parents_child, count_species, species_random
+from speciation import ind_specie, species, specie_parents_child, count_species, species_random, specie_offspring_random
 from fitness_sharing import SpeciesPunishment
 from ParentSelection import p_selection
 from tree_subt import add_subt, add_subt_cf
@@ -133,9 +133,10 @@ def ensure_dir(f):
     if not os.path.exists(d):
         os.makedirs(d)
 
+
 def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,neat_pelit, LS_flag, LS_select, cont_evalf,
                num_salto, SaveMatrix, GenMatrix, pset,n_corr, num_p, params, direccion, problem, testing, version, benchmark_flag, beta,
-               stats=None, halloffame=None, verbose=__debug__):
+               random_speciation, stats=None, halloffame=None, verbose=__debug__):
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_.
 
@@ -274,8 +275,10 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             for ind in population:
                 level_info = level_node(ind)
                 ind.nodefeat_set(level_info)
-
-        species_random(population,neat_h, version, beta)
+        if random_speciation:
+            species_random(population,neat_h, version, beta)
+        else:
+            species(population, neat_h, version, beta)
         #ind_specie(population)
 
     end_sp = time.time()
@@ -439,10 +442,13 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                     if ind.nodefeat_get() == None:
                         level_info = level_node(ind)
                         ind.nodefeat_set(level_info)
+            if random_speciation:
+                specie_offspring_random(parents, offspring, neat_h, version, beta)
+            else:
+                specie_parents_child(parents,offspring, neat_h, version, beta)
 
-            specie_parents_child(parents,offspring, neat_h, version, beta)
             offspring[:] = parents+offspring
-            #ind_specie(offspring)
+
             invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
             fitnesses = toolbox.map(toolbox.evaluate, invalid_ind)
 
@@ -488,13 +494,11 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                 idx_aux = np.searchsorted(Matrix[:, 0], gen)
                 Matrix_specie[idx_aux, 1] = ind_specie(offspring)
             else:
-                #num_c_sp -= 1
                 idx_aux = np.searchsorted(Matrix_specie[:, 0], funcEval.cont_evalp)
                 try:
                     Matrix_specie[idx_aux, 1] = ind_specie(offspring)
                 except IndexError:
                     Matrix_specie[-1, 1] = ind_specie(offspring)
-            #specie_statis.write('\n%s;%s' % (gen, ind_specie(offspring)))
             np.savetxt('./Specie/%s/specist_%d_%d.txt' % (problem, num_p, n_corr), Matrix_specie, delimiter=";",
                        fmt="%s")
 

@@ -10,26 +10,27 @@ db_name: "housing.txt"
 #db_name: "energy_efficiency_Heat.csv"
 
 
-population_size: 100
+population_size: 10
 tournament_size: 7
-generations: 200000
-cxpb: 0.7
-mutpb: 0.3
+generations: 100
+cxpb: 0.9
+mutpb: 0.1
 params: ['best_of_each_specie', 2, 'yes']
 
-neat_cx: True
+neat_cx: False
 neat_alg: True
 neat_pelit: 0.5
 neat_h: 0.15
 neat_beta: 0.5
+nRandom_speciation: True
 
 ls_flag: False
 ls_select: 8
 
 save_matrix: True
-gen_matrix: False
+gen_matrix: True
 
-num_salto: 500
+num_salto: 1
 cont_evalf: 100000
 
 run_begin: 1

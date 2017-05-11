@@ -276,21 +276,24 @@ def specie_offspring_random(parents, offspring, h, version, beta):
     :return: A set of descendent with specie.
     """
     n_esp = count_species(parents)
-    for ind in offspring:
-        if ind.get_specie() is None:
-            if len(ind) == 1:
-                ind.specie(1)
-            else:
-                list_s = list_species(parents)
-                for specie in list_s:
-                    list_ind = get_ind_specie(specie, parents)
-                    r_ind = choice(list_ind)
-                    if distance(ind, r_ind, version, beta) <= h:
-                        ind.specie(r_ind.get_specie())
-                        break
-                if ind.get_specie() is None:
-                    ind.specie(n_esp+1)
-                    n_esp += 1
+    if n_esp >= 1:
+        for ind in offspring:
+            if ind.get_specie() is None:
+                if len(ind) == 1:
+                    ind.specie(1)
+                else:
+                    list_s = list_species(parents)
+                    for specie in list_s:
+                        list_ind = get_ind_specie(specie, parents)
+                        r_ind = choice(list_ind)
+                        if distance(ind, r_ind, version, beta) <= h:
+                            ind.specie(r_ind.get_specie())
+                            break
+                    if ind.get_specie() is None:
+                        ind.specie(n_esp+1)
+                        n_esp += 1
+    else:
+        print ("Error en las especies de los padres/descencientes")
     return offspring
 
 
