@@ -6,7 +6,7 @@ import os
 import time
 from deap import tools
 from neat_operators import neatGP
-from speciation import ind_specie, species, specie_parents_child, count_species
+from speciation import ind_specie, species, specie_parents_child, count_species, species_random
 from fitness_sharing import SpeciesPunishment
 from ParentSelection import p_selection
 from tree_subt import add_subt, add_subt_cf
@@ -275,7 +275,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                 level_info = level_node(ind)
                 ind.nodefeat_set(level_info)
 
-        species(population,neat_h, version, beta)
+        species_random(population,neat_h, version, beta)
         #ind_specie(population)
 
     end_sp = time.time()
@@ -440,7 +440,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                         level_info = level_node(ind)
                         ind.nodefeat_set(level_info)
 
-            specie_parents_child(parents,offspring, neat_h, version)
+            specie_parents_child(parents,offspring, neat_h, version, beta)
             offspring[:] = parents+offspring
             #ind_specie(offspring)
             invalid_ind = [ind for ind in offspring if not ind.fitness.valid]

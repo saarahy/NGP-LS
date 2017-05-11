@@ -239,7 +239,7 @@ def specie_ind(population,ind, h):
     return ind
 
 
-def specie_parents_child(parents, offspring, h, version):
+def specie_parents_child(parents, offspring, h, version, beta):
     """
     This method assign the specie to each children.
     The assignation of the specie depends of the specie of the parent.
@@ -250,19 +250,47 @@ def specie_parents_child(parents, offspring, h, version):
     """
     n_esp = count_species(parents)
     for ind in offspring:
-        if ind.get_specie() == None:
+        if ind.get_specie() is None:
             if len(ind) == 1:
                 ind.specie(1)
             else:
                 for parent in parents:
-                    if parent.get_specie() != None:
-                        if distance(ind, parent, version,beta=0.5) <= h:
+                    if parent.get_specie() is not None:
+                        if distance(ind, parent, version, beta) <= h:
                             ind.specie(parent.get_specie())
                             break
-                if ind.get_specie()==None:
+                if ind.get_specie() is None:
                     ind.specie(n_esp+1)
-                    n_esp+=1
+                    n_esp += 1
     return offspring
 
+
+def specie_offspring_random(parents, offspring, h, version, beta):
+    """
+    Modified May 10th
+    This method assign the specie to each children.
+    The assignation of the specie depends of the specie of the parent.
+    :param parents: set of parents
+    :param offspring: set of descendents without specie
+    :param h: distace to compare, deafult .15
+    :return: A set of descendent with specie.
+    """
+    n_esp = count_species(parents)
+    for ind in offspring:
+        if ind.get_specie() is None:
+            if len(ind) == 1:
+                ind.specie(1)
+            else:
+                list_s = list_species(parents)
+                for specie in list_s:
+                    list_ind = get_ind_specie(specie, parents)
+                    r_ind = choice(list_ind)
+                    if distance(ind, r_ind, version, beta) <= h:
+                        ind.specie(r_ind.get_specie())
+                        break
+                if ind.get_specie() is None:
+                    ind.specie(n_esp+1)
+                    n_esp += 1
+    return offspring
 
 
