@@ -6,7 +6,7 @@ import os
 import time
 from deap import tools
 from neat_operators import neatGP
-from speciation import ind_specie, species, specie_parents_child, count_species, species_random, specie_offspring_random
+from speciation import ind_specie, species, specie_parents_child, species_random, specie_offspring_random, calc_intracluster
 from fitness_sharing import SpeciesPunishment
 from ParentSelection import p_selection
 from tree_subt import add_subt, add_subt_cf
@@ -279,11 +279,15 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             species_random(population,neat_h, version, beta)
         else:
             species(population, neat_h, version, beta)
+
+
+
+
         end_sp = time.time()
         time_specie.write('\n%s;%s;%s;%s' % (0, begin_sp, end_sp, str(round(end_sp - begin_sp, 2))))
 
         for ind in population:
-            specie_file.write('\n%s;%s;%s' % (0, ind.get_specie(), ind))
+            specie_file.write('\n%s;%s;%s;%s' % (0, ind.get_specie(), ind.get_intracluster(), ind))
 
     if funcEval.LS_flag:
         for ind in population:
@@ -443,11 +447,12 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             else:
                 specie_parents_child(parents, offspring, neat_h, version, beta)
 
+            calc_intracluster(population)
             offspring[:] = parents + offspring
 
-            # for ind in offspring:
-            #     specie_file.write('\n%s;%s;%s' % (gen,ind.get_specie(), ind))
-            #
+            for ind in offspring:
+                specie_file.write('\n%s;%s;%s;%s' % (gen, ind.get_specie(), ind.get_intracluster(), ind))
+
             invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
             if funcEval.LS_flag:
                 new_invalid_ind = []

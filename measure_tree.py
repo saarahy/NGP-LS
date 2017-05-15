@@ -76,9 +76,10 @@ def distance(ind1, ind2, version, beta):
         nsij = common_tree[0]
         dsij = common_tree[1]
 
-    d1=b*((Nij-(2*nsij))/(Nij-2))
-    d2=(1-b)*((Dij-(2*dsij))/(Dij-2))
-    d=d1+d2
+    d1 = b*((Nij-(2*nsij))/(Nij-2))
+    d2 = (1-b)*((Dij-(2*dsij))/(Dij-2))
+
+    d = d1+d2
     return d
 
 

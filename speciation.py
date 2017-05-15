@@ -1,5 +1,6 @@
 from deap import base, creator, gp, tools
 from random import choice
+from numpy import average
 
 from measure_tree import *
 #Inicializa las poblacion con una sola especie
@@ -133,6 +134,42 @@ def set_numind(ind, species):
     for i in range(len(species)):
         if species[i][0] == ind.get_specie() and ind.num_specie is not None:
             ind.num_specie(species[i][1])
+
+def intracluster(gpo_specie):
+    """
+    Upgrade: May 11th
+    This method calculates the intracluster distance in a specie. 
+    :param gpo_specie: The specie to calculate the intracluster
+    """
+    list_distance = []
+    for ind in gpo_specie:
+        list_d = []
+        for e_ind in range(0, len(gpo_specie)):
+            if len(ind) == 1 and len(gpo_specie[e_ind]) == 1:
+                d = 0
+            else:
+                d = distance(ind, gpo_specie[e_ind], version = 3, beta = 0.5)
+            list_d.append(d)
+        try:
+            list_distance.append(min(list_d))
+        except ValueError:
+            print list_distance
+    avg_distance = average(list_distance)
+    for ind in gpo_specie:
+        ind.set_intracluster(avg_distance)
+    return avg_distance
+
+def calc_intracluster(population):
+    """
+    Upgrade: May 11th
+    This method calculates the intracluster distance in each specie. 
+    :param population: all the individuals
+    """
+    list_s = list_species(population)
+    for specie in list_s:
+        list_ind = get_ind_specie(specie, population)
+        if len(list_ind) >= 2:
+            intracluster(list_ind)
 
 
 def species_random(population, h, version, beta):

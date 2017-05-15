@@ -30,21 +30,22 @@ class PrimitiveTree(gp.PrimitiveTree, neat):
     """
     def __init__(self, content):
         list.__init__(self, content)
-        self.tspecie=None
-        self.descendent=None
-        self.fitness_h=None
-        self.nspecie=None
-        self.LS_prob=None
-        self.params=None
-        self.best_ind=None
-        self.ls_ind=None
-        self.ls_fitness=None
-        self.ls_story=None
-        self.off_cx=None
-        self.off_mut=None
-        self.repr_bin=None
+        self.tspecie = None
+        self.descendent = None
+        self.fitness_h = None
+        self.nspecie = None
+        self.LS_prob = None
+        self.params = None
+        self.best_ind = None
+        self.ls_ind = None
+        self.ls_fitness = None
+        self.ls_story = None
+        self.off_cx = None
+        self.off_mut = None
+        self.repr_bin = None
         self.level_bin = None
-        self.node_feat=None
+        self.node_feat = None
+        self.intracluster = None
 
     def __deepcopy__(self, memo):
         new = self.__class__(self)

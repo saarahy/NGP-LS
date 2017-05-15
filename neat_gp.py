@@ -94,6 +94,12 @@ class neat:
     def nodefeat_set(self, value):
         self.node_feat=value
 
+    def get_intracluster(self):
+        return self.intracluster
+
+    def set_intracluster(self, value):
+        self.intracluster = value
+
 
 class pop_param:
     def save_ind(self):
