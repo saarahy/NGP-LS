@@ -128,6 +128,7 @@ def varAnd(population, toolbox, cxpb, mutpb):
 
     return offspring
 
+
 def ensure_dir(f):
     d = os.path.dirname(f)
     if not os.path.exists(d):

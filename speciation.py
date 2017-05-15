@@ -142,14 +142,15 @@ def intracluster(gpo_specie):
     :param gpo_specie: The specie to calculate the intracluster
     """
     list_distance = []
-    for ind in gpo_specie:
+    for j_ind in range(0, len(gpo_specie)):
         list_d = []
         for e_ind in range(0, len(gpo_specie)):
-            if len(ind) == 1 and len(gpo_specie[e_ind]) == 1:
-                d = 0
-            else:
-                d = distance(ind, gpo_specie[e_ind], version = 3, beta = 0.5)
-            list_d.append(d)
+            if gpo_specie[j_ind] != gpo_specie[e_ind]:
+                if len(gpo_specie[j_ind]) == 1 and len(gpo_specie[e_ind]) == 1:
+                    d = 0
+                else:
+                    d = distance(gpo_specie[j_ind], gpo_specie[e_ind], version=3, beta=0.5)
+                list_d.append(d)
         try:
             list_distance.append(min(list_d))
         except ValueError:
