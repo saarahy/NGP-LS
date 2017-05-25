@@ -142,14 +142,15 @@ def intracluster(gpo_specie):
     :param gpo_specie: The specie to calculate the intracluster
     """
     list_distance = []
-    for ind in gpo_specie:
+    for j_ind in range(0, len(gpo_specie)):
         list_d = []
         for e_ind in range(0, len(gpo_specie)):
-            if len(ind) == 1 and len(gpo_specie[e_ind]) == 1:
-                d = 0
-            else:
-                d = distance(ind, gpo_specie[e_ind], version = 3, beta = 0.5)
-            list_d.append(d)
+            if j_ind != e_ind:
+                if len(gpo_specie[j_ind]) == 1 and len(gpo_specie[e_ind]) == 1:
+                    d = 0
+                else:
+                    d = distance(gpo_specie[j_ind], gpo_specie[e_ind], version=3, beta=0.5)
+                list_d.append(d)
         try:
             list_distance.append(min(list_d))
         except ValueError:
@@ -159,6 +160,7 @@ def intracluster(gpo_specie):
         ind.set_intracluster(avg_distance)
     return avg_distance
 
+
 def calc_intracluster(population):
     """
     Upgrade: May 11th
@@ -166,10 +168,14 @@ def calc_intracluster(population):
     :param population: all the individuals
     """
     list_s = list_species(population)
+    l_sp = []
     for specie in list_s:
         list_ind = get_ind_specie(specie, population)
         if len(list_ind) >= 2:
-            intracluster(list_ind)
+            l_sp.append([specie, intracluster(list_ind)])
+        else:
+            l_sp.append([specie, 0.0])
+    return l_sp
 
 
 def species_random(population, h, version, beta):
