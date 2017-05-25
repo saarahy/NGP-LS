@@ -154,7 +154,7 @@ def intracluster(gpo_specie):
         try:
             list_distance.append(min(list_d))
         except ValueError:
-            print list_distance
+            print 'intra', list_distance
     avg_distance = average(list_distance)
     for ind in gpo_specie:
         ind.set_intracluster(avg_distance)
