@@ -1,8 +1,9 @@
 import random
 import operator
 import numpy as np
+import math
 from deap import gp
-from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt
+from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt, myexp, negexp, absolute, negative
 
 def koza1(samples):
     return samples**4 + samples**3 + samples**2 + samples
@@ -50,6 +51,7 @@ def rename_arguments(argument,pset):
         1: pset.renameArguments(ARG0='x0'),
         2: pset.renameArguments(ARG0='x0',ARG1='x1'),
         6: pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5'),
+        7: pset.renameArguments(ARG0='x0', ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG='x6'),
         8: pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7'),
         13: pset.renameArguments(ARG0='x0', ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7',
                                  ARG8='x8', ARG9='x9', ARG10='x10', ARG11='x11', ARG12='x12'),
@@ -60,6 +62,8 @@ def rename_arguments(argument,pset):
                                  ARG22='x22', ARG23='x23', ARG24='x24'),
     }
     return pset
+
+
 
 def conf_sets(num_var):
     pset = gp.PrimitiveSet("MAIN", num_var)
@@ -75,6 +79,10 @@ def conf_sets(num_var):
     pset.addPrimitive(mysqrt, 1)
     pset.addPrimitive(np.tan, 1)
     pset.addPrimitive(np.tanh, 1)
+    pset.addPrimitive(myexp, 1)
+    pset.addPrimitive(negexp, 1)
+    pset.addPrimitive(absolute, 1)
+    pset.addPrimitive(negative, 1)
     pset.addEphemeralConstant("rand101", lambda: random.uniform(-1, 1))
 
     pset=rename_arguments(num_var,pset)

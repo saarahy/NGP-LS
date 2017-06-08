@@ -10,19 +10,47 @@ def protectedDiv(left, right):
     except ZeroDivisionError:
         return z
 
+
 def myexp(x):
-    with np.errstate(divide='ignore',invalid='ignore'):
-        if isinstance(x,np.ndarray):
-            x=np.exp(x)
+    with np.errstate(divide='ignore', invalid='ignore'):
+        if isinstance(x, np.ndarray):
+            x = np.exp(x)
+            # with warnings.catch_warnings():
+            #     warnings.filterwarnings('error')
+            #     try:
+            #         x = np.exp(x)
+            #     except RuntimeWarning:
+            #         print x
             x[np.isinf(x)] = np.exp(700)
             x[np.isnan(x)] = np.exp(700)
             return x
         else:
             x = np.exp(x)
             if np.isinf(x):
-                x=np.exp(700)
+                x = np.exp(700)
             elif np.isnan(x):
-                x=np.exp(700)
+                x = np.exp(700)
+            return x
+
+def negexp(x):
+    with np.errstate(divide='ignore', invalid='ignore'):
+        if isinstance(x, np.ndarray):
+            x = np.negative(np.exp(x))
+            # with warnings.catch_warnings():
+            #     warnings.filterwarnings('error')
+            #     try:
+            #         x = np.exp(x)
+            #     except RuntimeWarning:
+            #         print x
+            x[np.isinf(x)] = np.negative(np.exp(700))
+            x[np.isnan(x)] = np.negative(np.exp(700))
+            return x
+        else:
+            x = np.negative(np.exp(x))
+            if np.isinf(x):
+                x = np.negative(np.exp(700))
+            elif np.isnan(x):
+                x = np.negative(np.exp(700))
             return x
 
 
@@ -85,7 +113,17 @@ def mypower3(x):
 
 
 def negative(x):
-    return -x
+    if isinstance(x, np.ndarray):
+        return np.negative(x)
+    else:
+        return -x
+
+
+def absolute(x):
+    if isinstance(x, np.ndarray):
+        return np.absolute(x)
+    else:
+        return abs(x)
 
 
 def undivide(x):

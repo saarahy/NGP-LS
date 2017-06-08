@@ -27,19 +27,35 @@ def evalSymbReg(individual, points, toolbox, config):
     else:
         vector = points[config["num_var"]]
         data_x = np.asarray(points)[:config["num_var"]]
-    vector_x = func(*data_x)
+    try:
+        vector_x = func(*data_x)
+    except TypeError:
+        print individual
+        print data_x
     with np.errstate(divide='ignore', invalid='ignore'):
         if isinstance(vector_x, np.ndarray):
             for e in range(len(vector_x)):
                 if np.isnan(vector_x[e]) or np.isinf(vector_x[e]):
                     vector_x[e] = 0.
-    result = np.sum((vector_x - vector)**2)
-    return np.sqrt(result/len(points[0])),
+    if config["funcion"] == 1:
+        result = np.sum((vector_x - vector)**2)
+        return np.sqrt(result/len(points[0])),
+    elif config["funcion"] == 2:
+        l = len(points[0])
+        ME = np.sum(abs((vector_x - vector))) / l
+        SD = np.sqrt(np.sum((vector_x - ME) ** 2) / (l))
+        try:
+            calc = 100 * (SD / ME)
+            return calc,
+        except ZeroDivisionError:
+            return 100,
 
 
 def train_test(n_corr, p, problem, name_database, toolbox, config):
     n_archivot='./data_corridas/%s/test_%d_%d.txt'%(problem,p,n_corr)
     n_archivo='./data_corridas/%s/train_%d_%d.txt'%(problem,p,n_corr)
+    #n_archivot = './data_corridas/%s/recorridos/loo/fold-%d/LooTest0.txt' % (problem, n_corr)
+    #n_archivo = './data_corridas/%s/recorridos/loo/fold-%d/LooTrain0.txt' % (problem, n_corr)
     if not (os.path.exists(n_archivo) or os.path.exists(n_archivot)):
         direccion="./data_corridas/%s/%s" %(problem, name_database)
         with open(direccion) as spambase:
@@ -72,7 +88,7 @@ def train_test(n_corr, p, problem, name_database, toolbox, config):
                 try:
                     Matrix[r, c] = row[r]
                 except ValueError:
-                    print 'Line {r} is corrupt' , r
+                    print 'Line {r} is corrupt train' , r
                     break
         data_train=Matrix[:]
     with open(n_archivot) as spambase:
@@ -85,7 +101,7 @@ def train_test(n_corr, p, problem, name_database, toolbox, config):
                 try:
                     Matrix[r, c] = row[r]
                 except ValueError:
-                    print 'Line {r} is corrupt' , r
+                    print 'Line {r} is corrupt test' , r
                     break
         data_test=Matrix[:]
     toolbox.register("evaluate", evalSymbReg, points=data_train, toolbox=toolbox, config=config)
@@ -138,6 +154,7 @@ def main(n_corr, p, problem, database_name, pset, config):
 
     name_database=database_name
     direccion="./data_corridas/%s/train_%d_%d.txt"
+    #direccion = "./data_corridas/%s/recorridos/loo/fold-%d/LooTrain0.txt"
     train_test(n_corr,p, problem, name_database, toolbox, config)
 
     toolbox.register("select", tools.selTournament, tournsize=tournament_size)

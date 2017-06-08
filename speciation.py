@@ -174,6 +174,8 @@ def calc_intracluster(population):
         if len(list_ind) >= 2:
             l_sp.append([specie, intracluster(list_ind)])
         else:
+            for ind_j in list_ind:
+                ind_j.set_intracluster(0.0)
             l_sp.append([specie, 0.0])
     return l_sp
 

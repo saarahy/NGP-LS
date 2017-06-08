@@ -1,18 +1,19 @@
 benchmark: false
+#problem: "Conduccion"
 problem: "Housing2"
 #problem: "Yacht2"
-#num_var: 6
+#num_var: 8
 num_var: 13
 #n_problem: 123
-n_problem: 11012
+n_problem: 2
 db_name: "housing.txt"
 # db_name: "yacht_hydrodynamics.txt"
 #db_name: "energy_efficiency_Heat.csv"
 
 
-population_size: 10
+population_size: 100
 tournament_size: 7
-generations: 100
+generations: 500000
 cxpb: 0.9
 mutpb: 0.1
 params: ['best_of_each_specie', 2, 'yes']
@@ -24,17 +25,18 @@ neat_h: 0.15
 neat_beta: 0.5
 nRandom_speciation: True
 
-ls_flag: False
+ls_flag: True
 ls_select: 8
 
 save_matrix: True
-gen_matrix: True
+gen_matrix: False
 
-num_salto: 1
+num_salto: 500
 cont_evalf: 100000
 
-run_begin: 1
-run_end: 31
+run_begin: 0
+run_end: 1
 
+funcion: 1
 
 

@@ -22,7 +22,7 @@ class tree2f:
         elif p == '!':
             op = self.stack.pop()
             self.stack.append ('%s!' % (op) )
-        elif p in ['sin', 'cos', 'tan', 'mylog', 'tanh','mysqrt', 'mypower2', 'mypower3']:
+        elif p in ['sin', 'cos', 'tan', 'mylog', 'tanh','mysqrt', 'mypower2', 'mypower3', 'myexp', 'negexp', 'absolute', 'negative']:
             op = self.stack.pop()
             self.stack.append('%s(%s)' % (p, op))
         else:
@@ -35,12 +35,12 @@ class tree2f:
         elif p == '!':
             op = self.stack.pop ()
             self.stack.append('%s!' % (op) )
-        elif p in ['sin', 'cos', 'tan', 'mylog','tanh','mysqrt']:
+        elif p in ['sin', 'cos', 'tan', 'mylog','tanh','mysqrt','myexp', 'negexp', 'absolute', 'negative']:
             self.stack.append('%s(' % (p))
             self.brackets.append(')')
         else:
             op= self.stack.pop()
-            if not op in ['add(', 'sub(', 'mul(', 'safe_div(','sin(', 'cos(', 'tan(', 'mylog(','tanh(','mysqrt(']:
+            if not op in ['add(', 'sub(', 'mul(', 'safe_div(','sin(', 'cos(', 'tan(', 'mylog(','tanh(','mysqrt(','myexp(', 'negexp(', 'absolute(', 'negative(']:
                 self.stack.append('%s%s),' % (op,p))
                 self.brackets.pop()
             else:
