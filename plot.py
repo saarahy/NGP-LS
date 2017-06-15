@@ -7,21 +7,15 @@ from operator import add, sub, mul
 from numpy import sin, tan, cos, tanh, asarray, array
 import csv
 #directory='PierrickData22'
-directory='Conduccion'
+directory='Engine3'
 #id_number=22
 #name='patient1.csv'
 #name='data_engine_delayed.csv'
-#name='test_10104_8.txt'
-name='LooTrain0.txt'
-direccion="./data_corridas/Conduccion/recorridos/loo/fold-9/%s"%(name)
+name='train_10125_1.txt'
+#name='LooTrain0.txt'
+direccion="./data_corridas/Engine3/%s"%(name)
 datos_x0=list()
 datos_x1=list()
-datos_x2=list()
-datos_x3=list()
-datos_x4=list()
-datos_x5=list()
-datos_x6=list()
-datos_x7=list()
 datos_y=list()
 soluciones=list()
 aptitud=list()
@@ -30,17 +24,11 @@ with open(direccion) as spambase:
     for row in spamReader:
           datos_x0.append(float(row[0]))
           datos_x1.append(float(row[1]))
-          datos_x2.append(float(row[2]))
-          datos_x3.append(float(row[3]))
-          datos_x4.append(float(row[4]))
-          datos_x5.append(float(row[5]))
-          datos_x6.append(float(row[6]))
-          datos_x7.append(float(row[7]))
-          datos_y.append(float(row[8]))
+          datos_y.append(float(row[2]))
 #print datos_x
 #print datos_y
 
-direccion2="./Conduccion/data_min_RSE.txt"
+direccion2="./Engine3/data_min.txt"
 with open(direccion2) as spambase:
     spamReader = csv.reader(spambase,  delimiter=';', skipinitialspace=False)
     for row in spamReader:
@@ -49,7 +37,7 @@ with open(direccion2) as spambase:
           soluciones.append(row[3])
 
 data_save = []
-def f1(x0, x1,x2, x3,x4, x5,x6,x7,soluciones): #neat-GP-LS neat-cx
+def f1(x0, x1,soluciones): #neat-GP-LS neat-cx
     data_save.append(eval(soluciones[0]))
     return eval(soluciones[0])
         #( -0.0761271041432+(1.02740569219*(1.03230000973*sin((1.08298943136*mypower2((1.48210014838*tanh((0.848365007676*((0.831833272197*((0.816663211963*tan((1.09679734743*mypower2((1.01855459792*cos((0.824814137784*((0.819724629441*mysqrt((0.912215387816*((1.21287819779*((1.21646575703*safe_div((1.21646586662*tan((1.33162809574*x0))),(0.727406626443*((1.10678749263*0.0072188738240202)+(0.552492950003*x0)))))+(0.995311711743*((0.995311498524*tanh((0.99573199271*0.3144124528547403)))*(0.995329863212*tan((0.889792319857*x0)))))))+(0.82701511239*x0)))))-(1.00717109048*((0.935738402436*((1.1004653473*x0)-(0.826658801183*0.8079620242135872)))-(1.06195882185*((1.17416005179*-0.7866760625277252)+(0.875890742844*x0)))))))))))))-(1.36658148587*((0.389185009363*mysqrt((0.757329601481*((-0.637308551876*0.8170259759945775)+(1.09620553813*x0)))))-(1.56110854635*0.298983274862731)))))*(0.726629578039*mysqrt((0.598596750718*x0)))))))))))))
@@ -86,8 +74,13 @@ import numpy as np
 # line3,=plt.plot(d_x, f2(d_x, soluciones), linestyle='--',label='neat-GP-LS sub-cx (%s)' % aptitud[1])
 # line4,=plt.plot(d_x, f3(d_x, soluciones), label='neat-GP sub-cx (%s)' % aptitud[2])
 # line5,=plt.plot(d_x, f4(d_x, soluciones), label='neat-GP neat-cx (%s)'% aptitud[3])
-f1(asarray(datos_x0),asarray(datos_x1),asarray(datos_x2),asarray(datos_x3),asarray(datos_x4),asarray(datos_x5),asarray(datos_x6),asarray(datos_x7), soluciones)
-np.savetxt('./Conduccion/data_min_train_RSE.csv', data_save, delimiter=",", fmt="%s")
+
+vec_y1=f1(asarray(datos_x0),asarray(datos_x1), soluciones)
+
+result = np.sum((vec_y1 - datos_y)**2)
+print np.sqrt(result/len(datos_y)),
+
+np.savetxt('./Engine3/data_vector.csv', vec_y1, delimiter=",", fmt="%s")
 
 # plt.legend(handler_map={line1: HandlerLine2D(numpoints=4)}, loc=4)
 #plt.annotate(aptitud[0], xy=(time[-1]-30000, f1(d_x[-1], datos_x1[-1], soluciones)+0.3), color=line2.get_color(), size=13)

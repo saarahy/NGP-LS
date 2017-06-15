@@ -35,22 +35,22 @@ def myexp(x):
 def negexp(x):
     with np.errstate(divide='ignore', invalid='ignore'):
         if isinstance(x, np.ndarray):
-            x = np.negative(np.exp(x))
+            x = np.exp(np.negative(x))
             # with warnings.catch_warnings():
             #     warnings.filterwarnings('error')
             #     try:
             #         x = np.exp(x)
             #     except RuntimeWarning:
             #         print x
-            x[np.isinf(x)] = np.negative(np.exp(700))
-            x[np.isnan(x)] = np.negative(np.exp(700))
+            x[np.isinf(x)] = np.exp(np.negative(700))
+            x[np.isnan(x)] = np.exp(np.negative(700))
             return x
         else:
-            x = np.negative(np.exp(x))
+            x = np.exp(np.negative(x))
             if np.isinf(x):
-                x = np.negative(np.exp(700))
+                x = np.exp(np.negative(700))
             elif np.isnan(x):
-                x = np.negative(np.exp(700))
+                x = np.exp(np.negative(700))
             return x
 
 
