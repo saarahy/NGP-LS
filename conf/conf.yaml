@@ -1,11 +1,11 @@
 benchmark: false
 #problem: "Conduccion"
-problem: "Housing2"
+problem: "Housing3"
 #problem: "Yacht2"
 #num_var: 8
 num_var: 13
 #n_problem: 123
-n_problem: 2
+n_problem: 21000
 db_name: "housing.txt"
 # db_name: "yacht_hydrodynamics.txt"
 #db_name: "energy_efficiency_Heat.csv"
@@ -25,17 +25,17 @@ neat_h: 0.15
 neat_beta: 0.5
 nRandom_speciation: True
 
-ls_flag: True
-ls_select: 8
+ls_flag: False
+ls_select: 9
 
 save_matrix: True
 gen_matrix: False
 
 num_salto: 500
-cont_evalf: 100000
+cont_evalf: 200000
 
-run_begin: 0
-run_end: 1
+run_begin: 1
+run_end: 31
 
 funcion: 1
 
