@@ -12,6 +12,12 @@ The previous software that you'll need are:<br>
 -scipy http://www.scipy.org/<br>
 </br>
 </br>
+</br>
+<h1>Instructions</h1>
+After the installation you only have to configure the parameters in the conf file (conf.yaml) and the run the MAIN_FILE.py.
+If you want to add or remove the primitives set you have to modify the conf_primitives.py file, also in this file you can check if the number of arguments that you are going to need is in dictionary of the rename_arguments method.
+</br>
+</br>
 And that's all. <br>
-If you have a problem please contact me: pjuarez@tree-lab.org <br>
+If you have a problem please contact me: juarez.s.perla[at]gmail.com <br>
 Regards!<br>
