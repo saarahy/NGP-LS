@@ -195,8 +195,8 @@ def curve_fit_2(f, strg,xdata, ydata, p0=None, sigma=None, absolute_sigma=False,
         if res==False:
             return [0],[0],res,0
         if not res.success:
-            nfev_m=(n+1)+((n*n)/2)+res.nfev
-            return res.x,[0],True, nfev_m
+            #nfev_m=(n+1)+((n*n)/2)+res.nfev
+            return res.x,[0],True, res.nfev
             #raise RuntimeError("Optimal parameters not found: " + res.message)
 
         cost = 2 * res.cost  # res.cost is half sum of squares!
@@ -231,8 +231,8 @@ def curve_fit_2(f, strg,xdata, ydata, p0=None, sigma=None, absolute_sigma=False,
     if return_full:
         return popt, pcov, infodict, errmsg, ier
     else:
-        nfev_m = (n + 1) + ((n * n) / 2) + res.nfev
-        return popt, pcov, res.success, nfev_m
+        #nfev_m = (n + 1) + ((n * n) / 2) + res.nfev
+        return popt, pcov, res.success, res.nfev
 
 
 
