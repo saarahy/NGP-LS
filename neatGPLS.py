@@ -435,7 +435,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
         else:
             offspring = varOr(parents, toolbox, cxpb, mutpb)
         end_cx = time.time()
-        time_specie.write('\n%s;%s;%s;%s' % (0, begin_cx, end_cx, str(round(end_sp - begin_sp, 2))))
+        time_specie.write('\n%s;%s;%s;%s' % (0, begin_cx, end_cx, str(round(end_cx - begin_cx, 2))))
 
         if neat_alg:  # Speciation of the descendants
             begin_sp = time.time()
