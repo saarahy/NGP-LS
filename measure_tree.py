@@ -95,45 +95,50 @@ def compare_tree(tree1, tree2, version):
     :return: a tuple with the number of nodes and the common depth
     """
     nodo = 0
-    lista_nivel=list()
+    lista_nivel = list()
+    list_tree1 = list()
+    list_tree2 = list()
+    first_node = False
 
     if version == 2:
-        expr1=tree1.nodefeat_get()
-        expr2=tree2.nodefeat_get()
+        expr1 = tree1.nodefeat_get()
+        expr2 = tree2.nodefeat_get()
     elif version == 3:
         expr1 = level_node(tree1)
         expr2 = level_node(tree2)
 
     for ind1 in expr1:
         for ind2 in expr2:
-            if ind1==ind2 and ind1[0]==0:
-                nodo+=1
+            if ind1 == ind2 and ind1[0] == 0:
+                nodo += 1
+                first_node = True
                 lista_nivel.append(ind1[1])
-                break
-            elif tot_grpo(expr1, ind1[1])==2 and tot_grpo(expr2, ind1[1])==2 and ind1[1] not in lista_nivel:
-                nodo+=2
-                lista_nivel.append(ind1[1])
-                break
-            elif tot_grpo(expr1, ind1[1])<tot_grpo(expr2, ind1[1]) and ind1[1] not in lista_nivel:
-                total=tot_grpo(expr1,ind1[1])
-                nodo+=total
-                if total>0:
-                    lista_nivel.append(ind1[1])
-                break
-            elif tot_grpo(expr1, ind1[1])>tot_grpo(expr2, ind1[1]) and ind1[1] not in lista_nivel:
-                total=tot_grpo(expr2,ind1[1])
-                nodo+=total
-                if total>0:
-                    lista_nivel.append(ind1[1])
-                break
-            elif tot_grpo(expr1, ind1[1])==tot_grpo(expr2, ind1[1]) and ind1[1] not in lista_nivel:
-                total=tot_grpo(expr2,ind1[1])
-                nodo+=total
-                if total>0:
-                    lista_nivel.append(ind1[1])
+                list_tree1.append(ind1)
+                list_tree2.append(ind2)
                 break
             elif ind1[1] in lista_nivel:
                 break
+            elif ind1[1] not in lista_nivel and first_node:
+                if ind1[1] - 1 in lista_nivel:
+                    total = 0
+                    nivel_ant = ind1[1]-1
+                    for elem in range(len(list_tree1)):
+                        prev_node = ind1[0]-1
+                        level_= list_tree1[elem][0]
+                        if list_tree1[elem][1] == nivel_ant and prev_node == list_tree1[elem][0]:
+                            if list_tree2[elem][2] == list_tree1[elem][2]:
+                                total = list_tree2[elem][2]
+                                [list_tree2.append(x) for x in expr2 if (x[0] == list_tree2[elem][0] + 1 or x[0] == list_tree2[elem][0] + 2)]
+                                [list_tree1.append(x) for x in expr1 if
+                                 (x[0] == list_tree1[elem][0] + 1 or x[0] == list_tree1[elem][0] + 2)]
+                    nodo += total
+                    if total > 0:
+                        lista_nivel.append(ind1[1])
+                    break
+                else:
+                    break
+            if not first_node:
+                return 1, 1
     return nodo, max(lista_nivel)
 
 
@@ -207,13 +212,18 @@ def level_data(expr):
     return level
 
 
-def tot_grpo(exp,nivel):
+def tot_grpo(exp, nivel):
     total = 0
     for i in exp:
         if i[1] == nivel:
             total += 1
     return total
 
+def tot_grpo_exp(exp, nivel,list_t):
+    for i in exp:
+        if i[1] == nivel:
+            list_t.append(i)
+    return list_t
 
 def p_bin(ind1):
     size = (np.power(2, ind1.height + 1) - 1)

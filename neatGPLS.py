@@ -232,6 +232,10 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
     ensure_dir(d)
     specie_file = open(d, 'w')
 
+    d = './Specie/%s/speciepop_%d_%d.csv' % (problem, num_p, n_corr)
+    ensure_dir(d)
+    specie_file_2 = open(d, 'w')
+
     d = './Specie/%s/specist_%d_%d.txt' % (problem, num_p, n_corr)
     ensure_dir(d)
     specie_statis = open(d, 'w')
@@ -287,8 +291,8 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
         end_sp = time.time()
         time_specie.write('\n%s;%s;%s;%s' % (0, begin_sp, end_sp, str(round(end_sp - begin_sp, 2))))
 
-        #for ind in population:
-        #    specie_file.write('\n%s,%s,%s' % (0, ind.get_specie(), ind.get_intracluster()))
+        for ind in population:
+            specie_file_2.write('\n%s,%s,%s' % (0, ind.get_specie(), ind.get_intracluster()))
 
         list_s = list_species(population)
         for specie in list_s:
@@ -457,15 +461,15 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             offspring[:] = parents + offspring
             calc_intracluster(offspring)
 
-            #for ind in offspring:
-            #    specie_file.write('\n%s,%s,%s' % (gen, ind.get_specie(), ind.get_intracluster()))
+            for ind in offspring:
+                specie_file_2.write('\n%s,%s,%s' % (gen, ind.get_specie(), ind.get_intracluster()))
 
             list_s = list_species(offspring)
             for specie in list_s:
                 list_ind = get_ind_specie(specie, offspring)
                 specie_file.write('\n%s,%s,%s' % (gen, specie, list_ind[0].get_intracluster()))
 
-            invalid_ind = [ind for ind in offspring if not ind.fitness.valid]
+            invalid_ind = [ind for ind in offspring]
             if funcEval.LS_flag:
                 new_invalid_ind = []
                 for ind in invalid_ind:
