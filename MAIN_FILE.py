@@ -56,8 +56,6 @@ def evalSymbReg(individual, points, toolbox, config):
 def train_test(n_corr, p, problem, name_database, toolbox, config):
     n_archivot='./data_corridas/%s/test_%d_%d.txt'%(problem,p,n_corr)
     n_archivo='./data_corridas/%s/train_%d_%d.txt'%(problem,p,n_corr)
-    #n_archivot = './data_corridas/%s/recorridos/loo/fold-%d/LooTest0.txt' % (problem, n_corr)
-    #n_archivo = './data_corridas/%s/recorridos/loo/fold-%d/LooTrain0.txt' % (problem, n_corr)
     if not (os.path.exists(n_archivo) or os.path.exists(n_archivot)):
         direccion="./data_corridas/%s/%s" %(problem, name_database)
         with open(direccion) as spambase:
