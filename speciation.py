@@ -335,8 +335,19 @@ def specie_offspring_random(parents, offspring, h, version, beta):
                             ind.specie(r_ind.get_specie())
                             break
                     if ind.get_specie() is None:
-                        ind.specie(n_esp+1)
-                        n_esp += 1
+                        off_specie = list_species(offspring)
+                        if off_specie:
+                            new_species = list(set(off_specie) - set(list_s))
+                            if new_species:
+                                for specie in new_species:
+                                    list_ind = get_ind_specie(specie, offspring)
+                                    r_ind = choice(list_ind)
+                                    if distance(ind, r_ind, version, beta) <= h:
+                                        ind.specie(r_ind.get_specie())
+                                        break
+                        if ind.get_specie() is None:
+                            ind.specie(n_esp+1)
+                            n_esp += 1
     else:
         print ("Error en las especies de los padres/descencientes")
     return offspring

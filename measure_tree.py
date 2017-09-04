@@ -48,6 +48,7 @@ def recorrido(ind1, ind2):
         list1.extend(test(x, y))
     return list1
 
+
 def distance(ind1, ind2, version, beta):
     """
     This method determine the distance between two individuals
@@ -98,7 +99,10 @@ def compare_tree(tree1, tree2, version):
     lista_nivel = list()
     list_tree1 = list()
     list_tree2 = list()
+    list_parent_t1 = list()
+    list_parent_t2 = list()
     first_node = False
+    lista_aristas = list()
 
     if version == 2:
         expr1 = tree1.nodefeat_get()
@@ -107,37 +111,45 @@ def compare_tree(tree1, tree2, version):
         expr1 = level_node(tree1)
         expr2 = level_node(tree2)
 
-    for ind1 in expr1:
-        for ind2 in expr2:
-            if ind1 == ind2 and ind1[0] == 0:
+    for index in range(0, len(min(expr1, expr2))):
+        if expr1[index][1] not in lista_nivel:
+            if expr1[index][1] - 1 in lista_nivel:
+                nivel_ant = expr1[index][1]-1
+                list_tree1 = []
+                list_tree2 = []
+                [list_tree2.append(x) for x in expr2 if (x[1] == nivel_ant + 1)]
+                [list_tree1.append(x) for x in expr1 if (x[1] == nivel_ant + 1)]
+                x3 = []
+                if list_tree1 != [] and list_tree2 != []:
+                    x1 = list(zip(*list_tree1)[2])
+                    x2 = list(zip(*list_tree2)[2])
+                    for i in range(len(x1)):
+                        for ix in range(expr1.index(list_tree1[i])-1, -1, -1):
+                            if expr1[ix][1] == list_tree1[i][1]-1:
+                                padre1 = expr1[ix][0]
+                                break
+                        for ix in range(expr2.index(list_tree2[i])-1, -1, -1):
+                            if expr2[ix][1] == list_tree2[i][1]-1:
+                                padre2 = expr2[ix][0]
+                                break
+                        if x1[i] == x2[i] and padre1 in list_parent_t1 and padre2 in list_parent_t2:
+                            x3.append(x1[i])
+                            lista_aristas.append(list_tree1[i][2])
+                            lista_nivel.append(list_tree1[i][1])
+                            list_parent_t1.append(list_tree1[i][0])
+                            list_parent_t2.append(list_tree2[i][0])
+            elif expr1[0] == expr2[0] and expr1[0][0] == 0:
                 nodo += 1
+                lista_aristas.append(expr1[0][2])
                 first_node = True
-                lista_nivel.append(ind1[1])
-                list_tree1.append(ind1)
-                list_tree2.append(ind2)
-                break
-            elif ind1[1] in lista_nivel:
-                break
-            elif ind1[1] not in lista_nivel and first_node:
-                if ind1[1] - 1 in lista_nivel:
-                    total = 0
-                    nivel_ant = ind1[1]-1
-                    for elem in range(len(list_tree1)):
-                        prev_node = ind1[0]-1
-                        if list_tree1[elem][1] == nivel_ant and prev_node == list_tree1[elem][0]:
-                            if list_tree2[elem][2] == list_tree1[elem][2]:
-                                total = list_tree2[elem][2]
-                                for i in range(1,list_tree1[elem][2]+1):
-                                    [list_tree2.append(x) for x in expr2 if (x[0] == list_tree2[elem][0] + i)]
-                                    [list_tree1.append(x) for x in expr1 if (x[0] == list_tree1[elem][0] + i)]
-                    nodo += total
-                    if total > 0:
-                        lista_nivel.append(ind1[1])
-                    break
-                else:
-                    break
-            if not first_node:
-                return 1, 1
+                lista_nivel.append(expr1[0][1])
+                list_parent_t1.append(expr1[0][0])
+                list_parent_t2.append(expr1[0][0])
+                list_tree1.append(expr1[0])
+                list_tree2.append(expr1[0])
+        if not first_node:
+            return 1, 1
+    nodo += sum(lista_aristas)
     return nodo, max(lista_nivel)
 
 
