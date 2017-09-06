@@ -111,7 +111,7 @@ def compare_tree(tree1, tree2, version):
         expr1 = level_node(tree1)
         expr2 = level_node(tree2)
 
-    for index in range(0, len(min(expr1, expr2))):
+    for index in range(0, min(len(expr1), len(expr2))):
         if expr1[index][1] not in lista_nivel:
             if expr1[index][1] - 1 in lista_nivel:
                 nivel_ant = expr1[index][1]-1
@@ -123,22 +123,25 @@ def compare_tree(tree1, tree2, version):
                 if list_tree1 != [] and list_tree2 != []:
                     x1 = list(zip(*list_tree1)[2])
                     x2 = list(zip(*list_tree2)[2])
-                    for i in range(len(x1)):
+                    n_ = min(len(x1),len(x2))
+                    for i in range(n_):
                         for ix in range(expr1.index(list_tree1[i])-1, -1, -1):
-                            if expr1[ix][1] == list_tree1[i][1]-1:
-                                padre1 = expr1[ix][0]
-                                break
+                                if expr1[ix][1] == list_tree1[i][1]-1:
+                                    padre1 = expr1[ix][0]
+                                    break
                         for ix in range(expr2.index(list_tree2[i])-1, -1, -1):
-                            if expr2[ix][1] == list_tree2[i][1]-1:
-                                padre2 = expr2[ix][0]
-                                break
+                                if expr2[ix][1] == list_tree2[i][1]-1:
+                                    padre2 = expr2[ix][0]
+                                    break
                         if x1[i] == x2[i] and padre1 in list_parent_t1 and padre2 in list_parent_t2:
                             x3.append(x1[i])
                             lista_aristas.append(list_tree1[i][2])
                             lista_nivel.append(list_tree1[i][1])
                             list_parent_t1.append(list_tree1[i][0])
                             list_parent_t2.append(list_tree2[i][0])
-            elif expr1[0] == expr2[0] and expr1[0][0] == 0:
+                        elif padre1 in list_parent_t1 or padre2 in list_parent_t2:
+                            lista_nivel.append(list_tree1[i][1])
+            elif expr1[0] == expr2[0] and expr1[0][0] == 0 and not first_node:
                 nodo += 1
                 lista_aristas.append(expr1[0][2])
                 first_node = True

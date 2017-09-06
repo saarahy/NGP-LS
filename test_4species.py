@@ -1,12 +1,12 @@
 import csv
 import numpy as np
 import random, operator
-from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt, myexp
+from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt, myexp, negative, absolute
 from deap import gp
 
 #for i in range(2, 3):
-problem='Housing2'
-p=5001
+problem='Housing'
+p=10117
 n_corr=30
 n_archivo='./Results/%s/pop_file_%d_%d.txt'%(problem,p,n_corr)
 Matrix = np.empty((10101, 5,))
@@ -29,6 +29,8 @@ pset.addPrimitive(mypower3, 1)
 pset.addPrimitive(mysqrt, 1)
 pset.addPrimitive(np.tan, 1)
 pset.addPrimitive(np.tanh, 1)
+pset.addPrimitive(np.negative, 1)
+pset.addPrimitive(np.absolute, 1)
 pset.addEphemeralConstant("rand101", lambda: random.uniform(-1, 1))
 pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7',  ARG8='x8', ARG9='x9',  ARG10='x10',  ARG11='x11',  ARG12='x12')
 # pset.renameArguments(ARG0='x0',ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7',
@@ -72,7 +74,7 @@ with open(n_archivo) as spambase:
                 c2=cont
                 Matrix[c2, 0] = row[0]
                 Matrix[c2, 1] = row[1]
-                ind1=gp.PrimitiveTree.from_string(row[2], pset)
+                ind1=gp.PrimitiveTree.from_string(row[3], pset)
                 Matrix[c2, 2] = len(ind1)
                 Matrix[c2, 3] = ind1.height+1
                 cont += 1
