@@ -98,9 +98,14 @@ def train_test(n_corr, p, problem, name_database, toolbox, config, train_p, test
     if not (os.path.exists(n_archivo) or os.path.exists(n_archivot)):
         direccion="./data_corridas/%s/%s" %(problem, name_database)
         with open(direccion) as spambase:
-            spamReader = csv.reader(spambase,  delimiter=' ', skipinitialspace=True)
-            num_c = sum(1 for line in open(direccion))
-            num_r = len(next(csv.reader(open(direccion), delimiter=' ', skipinitialspace=True)))
+            if config["db_name"][-3:]=="txt":
+                spamReader = csv.reader(spambase,  delimiter=' ', skipinitialspace=True)
+                num_c = sum(1 for line in open(direccion))
+                num_r = len(next(csv.reader(open(direccion), delimiter=' ', skipinitialspace=True)))
+            else:
+                spamReader = csv.reader(spambase, delimiter=',', skipinitialspace=True)
+                num_c = sum(1 for line in open(direccion))
+                num_r = len(next(csv.reader(open(direccion), delimiter=',', skipinitialspace=True)))
             Matrix = np.empty((num_r, num_c,))
             for row, c in zip(spamReader, range(num_c)):
                 for r in range(num_r):
