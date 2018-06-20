@@ -20,6 +20,44 @@ from shutil import copyfile
 from conf_primitives import conf_sets, vector_benchmarks
 
 
+def evalSymbReg_b(individual, points, toolbox, config, type):
+    points.flags['WRITEABLE'] = False
+    func = toolbox.compile(expr=individual)
+    if config["benchmark"]:
+        vector = vector_benchmarks(config["problem"], points)
+        data_x = copy.deepcopy(np.asarray(points)[:])
+    else:
+        vector = copy.deepcopy(points[config["num_var"]])
+        data_x = copy.deepcopy(np.asarray(points)[:config["num_var"]])
+    try:
+        vector_x = func(*data_x)
+    except TypeError:
+        print individual
+        print data_x
+    with np.errstate(divide='ignore', invalid='ignore'):
+        if isinstance(vector_x, np.ndarray):
+            for e in range(len(vector_x)):
+                if np.isnan(vector_x[e]) or np.isinf(vector_x[e]):
+                    vector_x[e] = 0.
+    if config["funcion"] == 1:
+        d = './Results/%s/best_data_%d_%s.txt' % (config["problem"], config["n_problem"], type)
+        neatGPLS.ensure_dir(d)
+        best_test = open(d, 'w')
+        for item in vector_x:
+            best_test.write("%s\n" % item)
+        result = np.sum((vector_x - vector)**2)
+        return np.sqrt(result/len(points[0])),
+    elif config["funcion"] == 2:
+        l = len(points[0])
+        ME = np.sum(abs((vector_x - vector))) / l
+        SD = np.sqrt(np.sum((vector_x - ME) ** 2) / (l))
+        try:
+            calc = 100 * (SD / ME)
+            return calc,
+        except ZeroDivisionError:
+            return 100,
+
+
 def evalSymbReg(individual, points, toolbox, config):
     points.flags['WRITEABLE'] = False
     func = toolbox.compile(expr=individual)
@@ -53,9 +91,10 @@ def evalSymbReg(individual, points, toolbox, config):
             return 100,
 
 
-def train_test(n_corr, p, problem, name_database, toolbox, config):
-    n_archivot='./data_corridas/%s/test_%d_%d.txt'%(problem,p,n_corr)
-    n_archivo='./data_corridas/%s/train_%d_%d.txt'%(problem,p,n_corr)
+def train_test(n_corr, p, problem, name_database, toolbox, config, train_p, test_p):
+    n_archivo = './data_corridas/%s/train_%d_%d.txt' % (problem, p, n_corr)
+    #if config["test_flag"]:
+    n_archivot = './data_corridas/%s/test_%d_%d.txt' % (problem, p, n_corr)
     if not (os.path.exists(n_archivo) or os.path.exists(n_archivot)):
         direccion="./data_corridas/%s/%s" %(problem, name_database)
         with open(direccion) as spambase:
@@ -71,13 +110,14 @@ def train_test(n_corr, p, problem, name_database, toolbox, config):
                         print 'Line {r} is corrupt', r
                         break
         if not os.path.exists(n_archivo):
-            long_train=int(len(Matrix.T)*.7)
+            long_train = int(len(Matrix.T) * train_p)
             data_train1 = random.sample(Matrix.T, long_train)
             np.savetxt(n_archivo, data_train1, delimiter=",", fmt="%s")
-        if not os.path.exists(n_archivot):
-            long_test=int(len(Matrix.T)*.3)
-            data_test1 = random.sample(Matrix.T, long_test)
-            np.savetxt(n_archivot, data_test1, delimiter=",", fmt="%s")
+        if config["test_flag"]:
+            if not os.path.exists(n_archivot):
+                long_test = int(len(Matrix.T) * test_p)
+                data_test1 = random.sample(Matrix.T, long_test)
+                np.savetxt(n_archivot, data_test1, delimiter=",", fmt="%s")
     with open(n_archivo) as spambase:
         spamReader = csv.reader(spambase,  delimiter=',', skipinitialspace=True)
         num_c = sum(1 for line in open(n_archivo))
@@ -91,21 +131,26 @@ def train_test(n_corr, p, problem, name_database, toolbox, config):
                     print 'Line {r} is corrupt train' , r
                     break
         data_train=Matrix[:]
-    with open(n_archivot) as spambase:
-        spamReader = csv.reader(spambase,  delimiter=',', skipinitialspace=True)
-        num_c = sum(1 for line in open(n_archivot))
-        num_r = len(next(csv.reader(open(n_archivot), delimiter=',', skipinitialspace=True)))
-        Matrix = np.empty((num_r, num_c,))
-        for row, c in zip(spamReader, range(num_c)):
-            for r in range(num_r):
-                try:
-                    Matrix[r, c] = row[r]
-                except ValueError:
-                    print 'Line {r} is corrupt test' , r
-                    break
-        data_test=Matrix[:]
+    if config["test_flag"]:
+        with open(n_archivot) as spambase:
+            spamReader = csv.reader(spambase,  delimiter=',', skipinitialspace=True)
+            num_c = sum(1 for line in open(n_archivot))
+            num_r = len(next(csv.reader(open(n_archivot), delimiter=',', skipinitialspace=True)))
+            Matrix = np.empty((num_r, num_c,))
+            for row, c in zip(spamReader, range(num_c)):
+                for r in range(num_r):
+                    try:
+                        Matrix[r, c] = row[r]
+                    except ValueError:
+                        print 'Line {r} is corrupt test' , r
+                        break
+            data_test=Matrix[:]
     toolbox.register("evaluate", evalSymbReg, points=data_train, toolbox=toolbox, config=config)
-    toolbox.register("evaluate_test", evalSymbReg, points=data_test, toolbox=toolbox, config=config)
+    toolbox.register("evaluate_best_t", evalSymbReg_b, points=data_train, toolbox=toolbox, config=config, type="train")
+    if config["test_flag"]:
+        toolbox.register("evaluate_test", evalSymbReg, points=data_test, toolbox=toolbox, config=config)
+        toolbox.register("evaluate_best", evalSymbReg_b, points=data_test, toolbox=toolbox, config=config, type="test")
+
 
 
 def main(n_corr, p, problem, database_name, pset, config):
@@ -114,6 +159,8 @@ def main(n_corr, p, problem, database_name, pset, config):
     pop_size = config["population_size"]
     cxpb                = config["cxpb"]  # 0.9
     mutpb               = config["mutpb"]  # 0.1
+    train_p             = config["train_p"]
+    test_p              = config["test_p"]
     tournament_size     = config["tournament_size"]
     ngen                = config["generations"]
 
@@ -134,7 +181,7 @@ def main(n_corr, p, problem, database_name, pset, config):
     SaveMatrix          = config["save_matrix"]
     GenMatrix           = config["gen_matrix"]
     version             = 3
-    testing             = True
+    testing             = config["test_flag"]
     benchmark_flag      = config["benchmark"]
 
 
@@ -154,8 +201,7 @@ def main(n_corr, p, problem, database_name, pset, config):
 
     name_database=database_name
     direccion="./data_corridas/%s/train_%d_%d.txt"
-    #direccion = "./data_corridas/%s/recorridos/loo/fold-%d/LooTrain0.txt"
-    train_test(n_corr,p, problem, name_database, toolbox, config)
+    train_test(n_corr,p, problem, name_database, toolbox, config, train_p, test_p)
 
     toolbox.register("select", tools.selTournament, tournsize=tournament_size)
     toolbox.register("mate", neat_gp.cxSubtree)
@@ -182,7 +228,7 @@ def main(n_corr, p, problem, database_name, pset, config):
                                    neat_pelit, funcEval.LS_flag, LS_select, cont_evalf,
                                    num_salto, SaveMatrix, GenMatrix, pset, n_corr, p,
                                    params, direccion, problem, testing, version, benchmark_flag, beta,
-                                   random_speciation, stats=mstats, halloffame=hof, verbose=True)
+                                   random_speciation, config,stats=mstats, halloffame=hof, verbose=True)
 
     return pop, log, hof
 

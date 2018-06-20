@@ -1,4 +1,4 @@
-import scipy.optimize.minpack
+from scipy.optimize import least_squares
 import scipy.optimize.minpack as minpack
 import numpy as np
 from numpy import (atleast_1d, dot, take, triu, shape, eye,
@@ -191,7 +191,7 @@ def curve_fit_2(f, strg,xdata, ydata, p0=None, sigma=None, absolute_sigma=False,
         if ier not in [1, 2, 3, 4]:
             raise RuntimeError("Optimal parameters not found: " + errmsg)
     else:
-        res = minpack.least_squares(func, p0, args=args, bounds=bounds, method=method,**kwargs)
+        res = least_squares(func, p0, args=args, bounds=bounds, method=method,**kwargs)
         if res==False:
             return [0],[0],res,0
         if not res.success:

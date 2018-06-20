@@ -4,6 +4,7 @@ import numpy as np
 import copy
 import os
 import time
+
 from deap import tools
 from neat_operators import neatGP
 from speciation import ind_specie, species, specie_parents_child, species_random, specie_offspring_random, calc_intracluster, list_species, get_ind_specie
@@ -14,6 +15,42 @@ from tree2func import tree2f
 from treesize_h import trees_h, specie_h, best_specie, best_pop_ls, all_pop, trees_h_wo, ls_bestset, ls_random, ls_randbestset
 from my_operators import avg_nodes
 from measure_tree import level_node, p_bin
+
+
+def GOapp(population, toolbox, cxpb, mutpb):
+    assert (cxpb + mutpb) <= 1.0, ("The sum of the crossover and mutation "
+                                   "probabilities must be smaller or equal to 1.0.")
+
+    new_pop = [toolbox.clone(ind) for ind in population]
+    offspring = []
+    for i in range(1, len(new_pop), 2):
+        new_pop[i - 1].off_cx_set(0), new_pop[i].off_cx_set(0)
+        if random.random() < cxpb and len(ind) > 1:
+            new_pop[i - 1].off_cx_set(1)
+            new_pop[i].off_cx_set(1)
+            offspring1, offspring2 = toolbox.mate(new_pop[i - 1], new_pop[i])
+            del offspring1.fitness.values
+            del offspring2.fitness.values
+            offspring1.bestspecie_set(0), offspring2.bestspecie_set(0)
+            offspring1.off_cx_set(1), offspring2.off_cx_set(1)
+            offspring.append(offspring1)
+            offspring.append(offspring2)
+    for i in range(len(new_pop)):
+        if new_pop[i].off_cx_get() != 1:
+            if random.random() < (cxpb + mutpb):  # Apply mutation
+                offspring1, = toolbox.mutate(new_pop[i])
+                del offspring1.fitness.values
+                offspring1.bestspecie_set(0)
+                offspring1.off_mut_set(1)
+                offspring.append(offspring1)
+
+    if len(offspring) < len(population):
+        for i in range(len(new_pop)):
+            if new_pop[i].off_mut_get() != 1 and new_pop[i].off_cx_get() != 1:
+                offspring1 = copy.deepcopy(new_pop[i])
+                offspring.append(offspring1)
+
+    return offspring
 
 
 def varOr(population, toolbox, cxpb, mutpb):
@@ -35,14 +72,6 @@ def varOr(population, toolbox, cxpb, mutpb):
             offspring1.LS_fitness_set(None), offspring2.LS_fitness_set(None)
             offspring1.off_cx_set(1), offspring2.off_cx_set(1)
             offspring1.specie(None), offspring2.specie(None)
-            # sizep = len(offspring1)+2
-            # param_ones = np.ones(sizep)
-            # param_ones[0] = 0
-            # offspring1.params_set(param_ones)
-            # sizep = len(offspring2)+2
-            # param_ones = np.ones(sizep)
-            # param_ones[0] = 0
-            # offspring2.params_set(param_ones)
             offspring.append(offspring1)
             offspring.append(offspring2)
     for i in range(len(new_pop)):
@@ -54,11 +83,6 @@ def varOr(population, toolbox, cxpb, mutpb):
                 offspring1.LS_applied_set(0)
                 offspring1.LS_fitness_set(None)
                 offspring1.off_mut_set(1)
-                #offspring1.specie(None)
-                # sizep = len(offspring1)+2
-                # param_ones = np.ones(sizep)
-                # param_ones[0] = 0
-                # offspring1.params_set(param_ones)
                 offspring.append(offspring1)
 
     if len(offspring) < len(population):
@@ -137,7 +161,7 @@ def ensure_dir(f):
 
 def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,neat_pelit, LS_flag, LS_select, cont_evalf,
                num_salto, SaveMatrix, GenMatrix, pset,n_corr, num_p, params, direccion, problem, testing, version, benchmark_flag, beta,
-               random_speciation, stats=None, halloffame=None, verbose=__debug__):
+               random_speciation, config, stats=None, halloffame=None, verbose=__debug__):
     """This algorithm reproduce the simplest evolutionary algorithm as
     presented in chapter 7 of [Back2000]_.
 
@@ -600,8 +624,9 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             cd = c.convert(l_strg)
             new_invalid_ind.append(cd)
             bestind.write('\n%s;%s;%s' % (gen, best_ind.fitness.values[0],cd))
+            toolbox.map(toolbox.evaluate_best_t, [cd])
             if testing:
-                fit_best = toolbox.map(toolbox.evaluate_test, [cd])
+                fit_best = toolbox.map(toolbox.evaluate_best, [cd])
                 best_ind.fitness_test.values = fit_best[0]
 
                 best.write('\n%s;%s;%s;%s;%s;%s;%s' % (gen, funcEval.cont_evalp,  best_ind.fitness.values[0], best_ind.LS_fitness_get(), best_ind.fitness_test.values[0], len(best_ind), avg_nodes(population)))
@@ -611,8 +636,9 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                 None, len(best_ind), avg_nodes(population)))
             out.write('\n%s;%s;%s;%s;%s;%s' % (gen, len(best_ind), best_ind.LS_applied_get(), best_ind.get_params(), cd, best_ind))
         else:
+            toolbox.map(toolbox.evaluate_best_t, [best_ind])
             if testing:
-                fitnesses_test = toolbox.map(toolbox.evaluate_test, [best_ind])
+                fitnesses_test = toolbox.map(toolbox.evaluate_best, [best_ind])
                 best_ind.fitness_test.values = fitnesses_test[0]
                 best.write('\n%s;%s;%s;%s;%s;%s' % (gen, funcEval.cont_evalp, best_ind.fitness_test.values[0], best_ind.fitness.values[0], len(best_ind), avg_nodes(population)))
             else:

@@ -14,7 +14,8 @@ import numpy as np
     # d=d1+d2
     # return d
 
-def bin_c(n1, n2):
+
+def bin_c(n1, n2):   # XNOR operator
     return (n1 and n2) or (not n1 and not n2)
 
 
