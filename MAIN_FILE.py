@@ -61,17 +61,14 @@ def evalSymbReg_b(individual, points, toolbox, config, type):
 def evalSymbReg(individual, points, toolbox, config):
     points.flags['WRITEABLE'] = False
     func = toolbox.compile(expr=individual)
+    vector_x=[]
     if config["benchmark"]:
         vector = vector_benchmarks(config["problem"], points)
         data_x = copy.deepcopy(np.asarray(points)[:])
     else:
         vector = copy.deepcopy(points[config["num_var"]])
         data_x = copy.deepcopy(np.asarray(points)[:config["num_var"]])
-    try:
-        vector_x = func(*data_x)
-    except TypeError:
-        print individual
-        print data_x
+    vector_x = func(*data_x)
     with np.errstate(divide='ignore', invalid='ignore'):
         if isinstance(vector_x, np.ndarray):
             for e in range(len(vector_x)):
