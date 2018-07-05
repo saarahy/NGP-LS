@@ -87,7 +87,7 @@ def ls_random(population, p, n, pset, direccion, problem, benchmark_flag):  # si
     for ind in random_set:
         strg = ind.__str__()
         args = []
-        if len(pset.arguments) > 1:
+        if len(pset.arguments) >= 1:
             for arg in pset.arguments:
                 args.append(arg)
         l_strg = add_subt_cf(strg, args)
