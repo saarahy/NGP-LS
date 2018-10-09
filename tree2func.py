@@ -2,6 +2,8 @@ class tree2f:
     def __init__ (self):
         self.stack = []
         self.brackets=[]
+
+
     def push (self, p):
         if p in ['add', 'sub', 'mul']:
             if p=='add':
@@ -50,11 +52,14 @@ class tree2f:
 
             #self.stack.append(p)
 
+
     def convert(self, l):
         l.reverse()
         for e in l:
             self.push(e)
         return self.stack.pop()
+
+
     def convert_r(self, l):
         #l.reverse()
         for e in l:

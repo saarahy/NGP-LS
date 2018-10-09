@@ -293,6 +293,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             Matrix_specie[i, 0] = vector[i]
         Matrix[:, 6] = 0.
 
+
     if neat_alg:
         begin_sp = time.time()
         if version == 1:
@@ -379,7 +380,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
         out.write('\n%s;%s;%s' % (0, len(best_ind), best_ind))
 
     for ind in population:
-        pop_file.write('\n%s;%s;%s'%(0, ind.fitness.values[0], ind))
+        pop_file.write('\n%s;%s;%s'%(0,ind.fitness.values[0], ind))
 
     print '---- Generation %d -----' % (0)
     print 'Problem: ', problem
@@ -558,7 +559,6 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
 
         population[:] = offspring  # population update
 
-
         cond_ind = 0
         cont_better=0
         if funcEval.LS_flag:
@@ -605,12 +605,14 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
                     elif ind.fitness.values[0] == ls_fit:
                         print '=',
                 funcEval.cont_evalp += 1
+                pop_file.write('\n%s;%s;%s;%s;%s;%s;%s;%s' % (
+                gen, ind.fitness.values[0], ls_fit, ind.LS_applied_get(), ind, [x for x in ind.get_parent()] if ind.get_parent() is not None else [],[x for x in ind.get_params()], ind.get_id()))
                 ind.fitness.values = ls_fit
             print ''
 
 
-            for ind in population:
-                pop_file.write('\n%s;%s;%s;%s;%s'%(gen, ind.fitness.values[0], ind.LS_applied_get(), ind, [x for x in ind.get_params()]))
+        #for ind in population:
+
         else:
 
             for ind in population:
@@ -735,6 +737,8 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
         else:
             time_file.write('\n%s;%s;%s;%s;%s' % (
             gen, begin, end_t, str(round(end_t - begin, 2)), best_ind.fitness.values[0]))
+#        import convert_order
+#        convert_order.convert_(population)
     return population, logbook
 
 
