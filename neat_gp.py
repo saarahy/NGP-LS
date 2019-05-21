@@ -1,6 +1,18 @@
 class neat:
     #propiedades de la especiacion
     #cambio para neat
+    def get_id(self):
+        return self.id
+
+    def set_id_(self, id):
+        self.id=id
+
+    def get_parent(self):
+        return self.parent_
+
+    def set_parent(self, arg):
+        self.parent_ = arg
+
     def specie(self,sp):
         self.tspecie=sp
 

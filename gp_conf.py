@@ -16,9 +16,20 @@ from measure_tree import level_data
 ######################################
 # GP Data structure                  #
 ######################################
-
+import threading
 # Define the name of type for any types.
 __type__ = object
+class IdGenerator(object):
+    def __init__(self):
+        self.cur_id = 1
+        self.lock = threading.Lock()
+    def next_id(self):
+        with self.lock:
+            result = self.cur_id
+            self.cur_id += 1
+        return result
+
+newId = IdGenerator()
 
 class PrimitiveTree(gp.PrimitiveTree, neat):
     """Tree spefically formated for optimization of genetic
@@ -28,8 +39,11 @@ class PrimitiveTree(gp.PrimitiveTree, neat):
     have an attribute *arity* which defines the arity of the
     primitive. An arity of 0 is expected from terminals nodes.
     """
+
     def __init__(self, content):
         list.__init__(self, content)
+
+        self.id = newId.next_id()
         self.tspecie = None
         self.descendent = None
         self.fitness_h = None
@@ -46,6 +60,8 @@ class PrimitiveTree(gp.PrimitiveTree, neat):
         self.level_bin = None
         self.node_feat = None
         self.intracluster = None
+        self.parent_ = None
+
 
     def __deepcopy__(self, memo):
         new = self.__class__(self)
@@ -144,6 +160,8 @@ class PrimitiveTree(gp.PrimitiveTree, neat):
                 expr.append(Terminal(token, False, type_))
         return cls(expr)
 
+    def set_id(self):
+        self.set_id_(newId.next_id())
 
     @property
     def root(self):

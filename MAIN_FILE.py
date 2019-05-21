@@ -90,7 +90,6 @@ def evalSymbReg(individual, points, toolbox, config):
 
 def train_test(n_corr, p, problem, name_database, toolbox, config, train_p, test_p):
     n_archivo = './data_corridas/%s/train_%d_%d.txt' % (problem, p, n_corr)
-    #if config["test_flag"]:
     n_archivot = './data_corridas/%s/test_%d_%d.txt' % (problem, p, n_corr)
     if not (os.path.exists(n_archivo) or os.path.exists(n_archivot)):
         direccion="./data_corridas/%s/%s" %(problem, name_database)
@@ -226,13 +225,15 @@ def main(n_corr, p, problem, database_name, pset, config):
     mstats.register("min", np.min)
     mstats.register("max", np.max)
 
-    pop, log = neatGPLS.neat_GP_LS(pop, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,
+
+    pop, log, train_f, test_f = neatGPLS.neat_GP_LS(pop, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h,
                                    neat_pelit, funcEval.LS_flag, LS_select, cont_evalf,
                                    num_salto, SaveMatrix, GenMatrix, pset, n_corr, p,
                                    params, direccion, problem, testing, version, benchmark_flag, beta,
                                    random_speciation, config,stats=mstats, halloffame=hof, verbose=True)
 
-    return pop, log, hof
+    # Regresa el mejor de las generaciones
+    return pop, log, hof, train_f, test_f
 
 if __name__ == "__main__":
 
@@ -246,6 +247,18 @@ if __name__ == "__main__":
     neatGPLS.ensure_dir(c_f)
     copyfile('./conf/conf.yaml', ('./conf_record/%s/config_%s_%d.yaml'% (problem, problem, number)))
 
+    c_m = './matrix_complete/%s/Matrix_c_%d.csv' % (problem, number)
+    neatGPLS.ensure_dir(c_m)
+    matrix_complete = open(c_m, 'a')
+
+    c_s = './matrix_complete/%s/stats_train_%d.csv' % (problem, number)
+    neatGPLS.ensure_dir(c_s)
+    matrix_stats = open(c_s, 'a')
+
+    c_s = './matrix_complete/%s/stats_test_%d.csv' % (problem, number)
+    neatGPLS.ensure_dir(c_s)
+    matrix_stats_t = open(c_s, 'a')
+
     d = './Timing/%s/timing_cxneat_%d.txt' % (problem, number)
     neatGPLS.ensure_dir(d)
     time_conc = open(d, 'a')
@@ -255,9 +268,17 @@ if __name__ == "__main__":
     instance_name=socket.gethostname()
 
     n = config["run_begin"]
+    train_list = np.empty([config["run_end"]])
+    test_list = np.empty([config["run_end"]])
     while n < config["run_end"]:
         begin_p = time.time()
-        main(n, number, problem, database_name, pset, config)
+        a=main(n, number, problem, database_name, pset, config)
+        train_list[n]= a[3]
+        test_list[n] = a[4]
         n += 1
         end_p = time.time()
         time_conc.write('\n%s;%s;%s;%s' % (n, begin_p, end_p, str(round(end_p - begin_p, 2))))
+        matrix_complete.write('\n%s,%s' % (a[3],a[4]))
+    matrix_stats.write('\n%s,%s,%s,%s,%s,%s' % (np.min(train_list), np.max(train_list),np.mean(train_list), np.median(train_list), np.std(train_list), train_list.argmin()))
+    matrix_stats_t.write('\n%s,%s,%s,%s,%s,%s' % (
+    np.min(test_list), np.max(test_list), np.mean(test_list), np.median(test_list), np.std(test_list),test_list.argmin()))

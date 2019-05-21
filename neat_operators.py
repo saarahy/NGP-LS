@@ -20,6 +20,8 @@ def neatGP(toolbox, parents, cxpb, mutpb, n, mut, cx, pelit, neat_cx):
         if mut == 1 and random.random() < mutpb:  # mutation
             of=copy.deepcopy(ind1)
             offspring=toolbox.mutate(of)
+            offspring[0].set_id()
+            offspring[0].set_parent([ind1.get_id()])
             offspring[0].descendents(0)
             offspring[0].bestspecie_set(0)
             offspring[0].LS_applied_set(0)
@@ -53,12 +55,15 @@ def neatGP(toolbox, parents, cxpb, mutpb, n, mut, cx, pelit, neat_cx):
                         ind2 = random.choice(copy_parent)
             else:
                 ind2 = random.choice(copy_parent)
+
             of1 = copy.deepcopy(ind1)
             of2 = copy.deepcopy(ind2)
             if neat_cx:
                 hijo = neatcx(of1, of2, toolbox)
             else:
                 hijo, offspring2 = toolbox.mate(of1, of2)
+            hijo.set_id()
+            hijo.set_parent([ind1.get_id(), ind2.get_id()])
             hijo.descendents(0)
             hijo.fitness_sharing(0)
             hijo.bestspecie_set(None)
@@ -99,6 +104,7 @@ def neatGP(toolbox, parents, cxpb, mutpb, n, mut, cx, pelit, neat_cx):
                     del copy_parent[xi]
                     break
     return r
+
 
 def elitism_choice(ind, parents):
     sort_par=sort_fitnessvalues(parents)

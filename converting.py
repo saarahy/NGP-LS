@@ -50,3 +50,10 @@ class convert():
         expr1 = neat_gp.PrimitiveTree.from_string(cade, pset)
         return len(expr1)
 
+
+c = convert()
+#tokens = re.split("[ \t\n\r\f\v(),]", string)
+test = c.cont("tanh(absolute(sub(sub(x0, sin(mysqrt(absolute(mypower2(sin(sub(x0, sin(sub(x0, mylog(absolute(cos(mylog(absolute(-0.5673465831480815)))))))))))))), mylog(safe_div(sin(sub(mypower2(sin(sub(x0, mylog(absolute(-0.5673465831480815))))), mylog(absolute(-0.5673465831480815)))), mylog(mypower2(cos(-0.5673465831480815))))))))")
+#tokens = re.split("[ \t\n\r\f\v(),]", string)
+#test = c.cont("mul(cos(power3(x6)),sub(sub(mul(mylog(x6 ),sqrt(x4)), x3), mul(tan(x1 ),safe_div(tan(x0), tan(x4)))))")
+

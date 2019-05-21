@@ -9,6 +9,8 @@ def eval_(strg, x, *p):
         x_r = eval(strg)
     except TypeError:
         print 'Error.', strg
+    except NameError:
+        print strg
 
     return x_r
 

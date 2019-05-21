@@ -60,6 +60,20 @@ def rename_arguments(argument,pset):
                                  ARG15='x15',
                                  ARG16='x16', ARG17='x17', ARG18='x18', ARG19='x19', ARG20='x20', ARG21='x21',
                                  ARG22='x22', ARG23='x23', ARG24='x24'),
+        64: pset.renameArguments(ARG0='x0', ARG1='x1', ARG2='x2', ARG3='x3', ARG4='x4', ARG5='x5', ARG6='x6', ARG7='x7',
+                                 ARG8='x8', ARG9='x9',
+                                 ARG10='x10', ARG11='x11', ARG12='x12', ARG13='x13', ARG14='x14', ARG15='x15',
+                                 ARG16='x16', ARG17='x17', ARG18='x18', ARG19='x19', ARG20='x20',
+                                 ARG21='x21', ARG22='x22', ARG23='x23', ARG24='x24',
+                                 ARG25='x25', ARG26='x26', ARG27='x27', ARG28='x28', ARG29='x29',
+                                 ARG30='x30', ARG31='x31', ARG32='x32', ARG33='x33', ARG34='x34', ARG35='x35',
+                                 ARG36='x36', ARG37='x37', ARG38='x38', ARG39='x39',
+                                 ARG40='x40', ARG41='x41', ARG42='x42', ARG43='x43', ARG44='x44', ARG45='x45',
+                                 ARG46='x46', ARG47='x47', ARG48='x48', ARG49='x49',
+                                 ARG50='x50', ARG51='x51', ARG52='x52', ARG53='x53', ARG54='x54', ARG55='x55',
+                                 ARG56='x56', ARG57='x57', ARG58='x58', ARG59='x59',
+                                 ARG60='x60', ARG61='x61', ARG62='x62', ARG63='x63', ARG64='x64'
+                                 )
     }
     return pset
 

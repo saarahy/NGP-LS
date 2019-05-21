@@ -72,6 +72,10 @@ def varOr(population, toolbox, cxpb, mutpb):
             offspring1.LS_fitness_set(None), offspring2.LS_fitness_set(None)
             offspring1.off_cx_set(1), offspring2.off_cx_set(1)
             offspring1.specie(None), offspring2.specie(None)
+            offspring1.set_id()
+            offspring2.set_id()
+            offspring1.set_parent([new_pop[i].get_id(),  new_pop[i-1].get_id()])
+            offspring2.set_parent([new_pop[i].get_id(), new_pop[i - 1].get_id()])
             offspring.append(offspring1)
             offspring.append(offspring2)
     for i in range(len(new_pop)):
@@ -83,6 +87,8 @@ def varOr(population, toolbox, cxpb, mutpb):
                 offspring1.LS_applied_set(0)
                 offspring1.LS_fitness_set(None)
                 offspring1.off_mut_set(1)
+                offspring1.set_id()
+                offspring1.set_parent([new_pop[i].get_id(), new_pop[i - 1].get_id()])
                 offspring.append(offspring1)
 
     if len(offspring) < len(population):
@@ -429,7 +435,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
 
     # Begin the generational process
     for gen in range(1, ngen+1):
-
+        print "hola"
         if not GenMatrix:
             if funcEval.cont_evalp > cont_evalf:
                 break
@@ -447,6 +453,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
 
         best_ind = copy.deepcopy(best_pop(population))
         if neat_alg:
+            # survival_p = p_worst
             parents = p_selection(population, survival_p = 0.5)
         else:
             parents = toolbox.select(population, len(population))
@@ -515,7 +522,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
 
             end_sp = time.time()
             time_specie.write('\n%s;%s;%s;%s' % (gen, begin_sp, end_sp, str(round(end_sp - begin_sp, 2))))
-
+            print "neat-alg"
         else:
             invalid_ind = [ind for ind in offspring]
             if funcEval.LS_flag:
@@ -739,7 +746,7 @@ def neat_GP_LS(population, toolbox, cxpb, mutpb, ngen, neat_alg, neat_cx, neat_h
             gen, begin, end_t, str(round(end_t - begin, 2)), best_ind.fitness.values[0]))
 #        import convert_order
 #        convert_order.convert_(population)
-    return population, logbook
+    return population, logbook, best_ind.fitness.values[0],best_ind.fitness_test.values[0]
 
 
 def best_pop(population):
