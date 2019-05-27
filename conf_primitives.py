@@ -3,7 +3,7 @@ import operator
 import numpy as np
 import math
 from deap import gp
-from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt, myexp, negexp, absolute, negative
+from my_operators import safe_div, mylog, mypower2, mypower3, mysqrt, myexp, negexp, absolute, negative, if_then_else
 
 def koza1(samples):
     return samples**4 + samples**3 + samples**2 + samples
@@ -97,6 +97,7 @@ def conf_sets(num_var):
     #pset.addPrimitive(negexp, 1)
     pset.addPrimitive(absolute, 1)
     pset.addPrimitive(negative, 1)
+    pset.addPrimitive(if_then_else, 2)
     pset.addEphemeralConstant("rand101", lambda: random.uniform(-1, 1))
 
     pset=rename_arguments(num_var,pset)

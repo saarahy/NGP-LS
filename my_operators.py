@@ -148,3 +148,17 @@ def avg_nodes(population):
     min_size=min(nn_nodes)
     av_size=np.mean(nn_nodes)
     return av_size,max_size, min_size
+
+def foo(x,x1):
+    if x:
+        return x1
+
+def if_then_else(condition, out1):
+    #x=map(out1 if condition else out2)
+    try:
+        x=np.asarray(list(map(foo, condition, out1)))
+    except TypeError:
+        x=np.asarray(out1)
+    if len(x) == 0:
+        print 'null'
+    return x #out1 if a.any(condition) else out2

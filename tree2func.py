@@ -17,6 +17,10 @@ class tree2f:
             op1 = self.stack.pop()
             op2 = self.stack.pop()
             self.stack.append('(%s%s%s)' % (op1, p, op2))
+        elif p in ['if_then_else']:
+            op1 = self.stack.pop()
+            op2 = self.stack.pop()
+            self.stack.append('%s(%s,%s)'% (p, op1, op2))
         elif p in ['safe_div']:
             op1 = self.stack.pop()
             op2 = self.stack.pop()
@@ -37,12 +41,12 @@ class tree2f:
         elif p == '!':
             op = self.stack.pop ()
             self.stack.append('%s!' % (op) )
-        elif p in ['sin', 'cos', 'tan', 'mylog','tanh','mysqrt','myexp', 'negexp', 'absolute', 'negative']:
+        elif p in ['sin', 'cos', 'tan', 'mylog','tanh','mysqrt','myexp', 'negexp', 'absolute', 'negative', 'if_then_else']:
             self.stack.append('%s(' % (p))
             self.brackets.append(')')
         else:
             op= self.stack.pop()
-            if not op in ['add(', 'sub(', 'mul(', 'safe_div(','sin(', 'cos(', 'tan(', 'mylog(','tanh(','mysqrt(','myexp(', 'negexp(', 'absolute(', 'negative(']:
+            if not op in ['add(', 'sub(', 'mul(', 'safe_div(','sin(', 'cos(', 'tan(', 'mylog(','tanh(','mysqrt(','myexp(', 'negexp(', 'absolute(', 'negative(', 'if_then_else(']:
                 self.stack.append('%s%s),' % (op,p))
                 self.brackets.pop()
             else:

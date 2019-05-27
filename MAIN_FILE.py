@@ -68,7 +68,10 @@ def evalSymbReg(individual, points, toolbox, config):
     else:
         vector = copy.deepcopy(points[config["num_var"]])
         data_x = copy.deepcopy(np.asarray(points)[:config["num_var"]])
-    vector_x = func(*data_x)
+    try:
+        vector_x = func(*data_x)
+    except TypeError:
+        print 'error'
     with np.errstate(divide='ignore', invalid='ignore'):
         if isinstance(vector_x, np.ndarray):
             for e in range(len(vector_x)):

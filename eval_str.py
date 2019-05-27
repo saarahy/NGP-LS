@@ -1,5 +1,5 @@
 from numpy import sin, cos, divide, division, seterr, tanh, tan
-from my_operators import safe_div, mylog, mysqrt, mypower2, mypower3, myexp, negexp, negative, absolute
+from my_operators import safe_div, mylog, mysqrt, mypower2, mypower3, myexp, negexp, negative, absolute, if_then_else
 from operator import add, sub, mul
 
 

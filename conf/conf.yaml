@@ -1,17 +1,17 @@
 benchmark: false
-problem:
-num_var:
-n_problem:
-db_name:
+problem: "Vibraciones"
+num_var: 64
+n_problem: 1012
+db_name: "DB05_2.csv"
 train_p: 0.7
 test_p: 0.3
 test_flag: True
 
-population_size: 100
+population_size: 200
 tournament_size: 7
-generations: 200
-cxpb: 0.9
-mutpb: 0.1
+generations: 10
+cxpb: 0.7
+mutpb: 0.3
 params: ['best_of_each_specie', 2, 'yes']
 
 neat_cx: False
@@ -21,18 +21,18 @@ neat_h: 0.15
 neat_beta: 0.5
 nRandom_speciation: True
 
-ls_flag: False
+ls_flag: True
 ls_select: 8
 
 save_matrix: True
-gen_matrix: True
+gen_matrix: False
 
 
 num_salto: 500
-cont_evalf: 1000000
+cont_evalf: 100000
 
 run_begin: 1
-run_end: 2
+run_end: 11
 
 funcion: 1
 
