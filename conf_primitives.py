@@ -97,7 +97,7 @@ def conf_sets(num_var):
     #pset.addPrimitive(negexp, 1)
     pset.addPrimitive(absolute, 1)
     pset.addPrimitive(negative, 1)
-    pset.addPrimitive(if_then_else, 2)
+    #pset.addPrimitive(if_then_else, 2)
     pset.addEphemeralConstant("rand101", lambda: random.uniform(-1, 1))
 
     pset=rename_arguments(num_var,pset)
